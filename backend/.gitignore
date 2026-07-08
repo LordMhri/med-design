@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# production
+dist/
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+logs/
+*.log
+
+# testing
+coverage/
+.nyc_output/
+
+# temporary files
+tmp/
+temp/
