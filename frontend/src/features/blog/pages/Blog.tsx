@@ -1,0 +1,147 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { Container } from '@/shared/components/Container'
+import { Placeholder } from '@/shared/components/Placeholder'
+import { Eyebrow } from '@/shared/components/Tag'
+import { Logo } from '@/shared/components/Logo'
+import { ArrowCircleButton } from '@/shared/components/ArrowCircleButton'
+import { fadeInUp, revealOnce, slideInLeft, slideInRight } from '@/shared/lib/motion'
+import { blogApi } from '@/api/services/blog'
+import type { BlogPost } from '@/api/types'
+
+export default function Blog() {
+  return (
+    <>
+      <BlogHero />
+      <LatestPosts />
+    </>
+  )
+}
+
+function BlogHero() {
+  return (
+    <section className="relative w-full pt-4 pb-12 sm:pb-16">
+      <div className="relative">
+        <div className="hero-frame hero-mask overflow-hidden">
+          <img
+            src="/hero-bg.png"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-ink/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-ink/30" />
+        </div>
+
+        <div className="absolute inset-0 z-10 flex items-center justify-center px-6 sm:px-12 lg:px-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center text-center"
+          >
+            <Logo variant="light" className="text-5xl" />
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="mt-6 max-w-2xl text-sm leading-relaxed text-white/70"
+            >
+              We're not just another marketing agency—we specialize in the medical field. With deep
+              industry understanding and creative excellence, MEDesign delivers results that elevate
+              your brand, attract patients, and strengthen your digital presence in the competitive
+              healthcare market.
+            </motion.p>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function LatestPosts() {
+  const [posts, setPosts] = useState<BlogPost[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+    blogApi
+      .getPublished()
+      .then((items) => {
+        if (!cancelled) setPosts(items)
+      })
+      .catch(() => {
+        if (!cancelled) setError('Unable to load posts. Is the backend running?')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return (
+    <Container className="pb-20 lg:pb-28">
+      <Eyebrow className="mb-8 block">Latest</Eyebrow>
+
+      {loading ? (
+        <p className="text-slate-body">Loading posts…</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : posts.length === 0 ? (
+        <p className="text-slate-body">No published posts yet.</p>
+      ) : (
+        <div className="space-y-8">
+          {posts.map((post, index) => {
+            const isEven = index % 2 === 0
+
+            return (
+              <motion.div
+                key={post.id}
+                variants={fadeInUp}
+                {...revealOnce}
+                className={`grid gap-8 lg:grid-cols-2 items-center ${isEven ? '' : 'lg:grid-flow-dense'}`}
+              >
+                <motion.div
+                  variants={isEven ? slideInLeft : slideInRight}
+                  className={`flex justify-center ${!isEven ? 'lg:col-start-2' : ''}`}
+                >
+                  <div className="relative w-full">
+                    <Placeholder
+                      tone="dark"
+                      label={post.tags?.[0] || 'Blog'}
+                      className="aspect-[4/3] w-full rounded-3xl"
+                    />
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  variants={isEven ? slideInRight : slideInLeft}
+                  className={`flex flex-col gap-6 ${!isEven ? 'lg:col-start-1' : ''}`}
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    {(post.tags?.length ? post.tags : ['Insights']).slice(0, 2).map((tag) => (
+                      <Eyebrow key={tag}>{tag}</Eyebrow>
+                    ))}
+                  </div>
+
+                  <h3 className="text-2xl font-extrabold text-ink lg:text-3xl">{post.title}</h3>
+
+                  <p className="text-sm leading-relaxed text-slate-body max-w-lg">{post.excerpt}</p>
+
+                  <div className="flex gap-3">
+                    <Link to={`/blog/${post.slug || post.id}`}>
+                      <ArrowCircleButton />
+                    </Link>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )
+          })}
+        </div>
+      )}
+    </Container>
+  )
+}
