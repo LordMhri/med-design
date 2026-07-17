@@ -33,6 +33,9 @@ export default {
       maxWidth: {
         container: '1200px',
       },
+      aspectRatio: {
+        'hero-frame': '2141 / 1323',
+      },
       borderRadius: {
         '4xl': '2rem',
       },
