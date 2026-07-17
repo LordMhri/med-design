@@ -16,7 +16,7 @@ type Props = {
  * Masked display page hero matching the design pattern from the mockup.
  * Used across inner pages (Services, About, Work, Contact, Blog).
  */
-export function PageHero({ title, subtitle, children, size = 'md' }: Props) {
+export function PageHero({ title, subtitle, children }: Props) {
   return (
     <section className="relative w-full pt-4 pb-12 sm:pb-16">
       <div className="relative">
