@@ -14,8 +14,17 @@ export class Project {
   @Column()
   title: string
 
+  @Column({ unique: true })
+  slug: string
+
   @Column({ type: 'text' })
   description: string
+
+  @Column({ type: 'text', nullable: true })
+  excerpt: string
+
+  @Column({ nullable: true })
+  category: string
 
   @Column({ nullable: true })
   image: string

@@ -25,7 +25,8 @@ export class BlogService {
     const post = this.blogRepository.create({
       ...createBlogPostDto,
       slug,
-      publishedAt: createBlogPostDto.status === 'published' ? new Date() : null,
+      publishedAt:
+        createBlogPostDto.status === 'published' ? new Date() : undefined,
     })
     return this.blogRepository.save(post)
   }

@@ -8,34 +8,46 @@ export class CreateProjectDto {
   description: string
 
   @IsOptional()
-  @IsUrl()
-  image: string
+  @IsString()
+  slug?: string
+
+  @IsOptional()
+  @IsString()
+  excerpt?: string
+
+  @IsOptional()
+  @IsString()
+  category?: string
+
+  @IsOptional()
+  @IsString()
+  image?: string
 
   @IsOptional()
   @IsArray()
-  tags: string[]
+  tags?: string[]
 
   @IsOptional()
   @IsUrl()
-  link: string
+  link?: string
 
   @IsOptional()
   @IsString()
-  details: string
+  details?: string
 
   @IsOptional()
   @IsString()
-  challenge: string
+  challenge?: string
 
   @IsOptional()
   @IsString()
-  solution: string
+  solution?: string
 
   @IsOptional()
   @IsString()
-  results: string
+  results?: string
 
   @IsOptional()
   @IsArray()
-  images: string[]
+  images?: string[]
 }

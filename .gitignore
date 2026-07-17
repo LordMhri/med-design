@@ -3,18 +3,24 @@ dist
 dist-ssr
 *.local
 .DS_Store
+.env
+.env.local
 
 # Frontend
 frontend/node_modules
 frontend/dist
+frontend/.env
+frontend/.env.local
 
 # Backend
 backend/node_modules
 backend/dist
+backend/.env
+backend/.env.local
 
 # Mockup pages
 mockup_pages
 
-# Root level
-src
+# Legacy root src folder (monorepo now uses frontend/ and backend/)
+/src
 .vercel

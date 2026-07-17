@@ -1,29 +1,31 @@
-import { IsString, IsEmail, IsArray, IsOptional, IsNumber, IsPhoneNumber } from 'class-validator'
+import { IsString, IsEmail, IsArray, IsOptional, IsNumber, MinLength } from 'class-validator'
 
 export class CreateContactDto {
   @IsOptional()
   @IsString()
-  name: string
+  name?: string
 
   @IsEmail()
   email: string
 
   @IsOptional()
-  @IsPhoneNumber('ET')
-  phone: string
+  @IsString()
+  phone?: string
 
   @IsString()
+  @MinLength(1)
   message: string
 
   @IsOptional()
   @IsArray()
-  interests: string[]
+  @IsString({ each: true })
+  interests?: string[]
 
   @IsOptional()
   @IsNumber()
-  budget: number
+  budget?: number
 
   @IsOptional()
   @IsString()
-  referralSource: string
+  referralSource?: string
 }

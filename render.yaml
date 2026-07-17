@@ -1,0 +1,44 @@
+# Render Blueprint — MEDesign API + PostgreSQL
+# Deploy: Render Dashboard → New → Blueprint → connect GitHub repo
+
+databases:
+  - name: medesign-db
+    plan: free
+    databaseName: medesign
+    user: medesign
+
+services:
+  - type: web
+    name: medesign-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: medesign-db
+          property: connectionString
+      - key: TYPEORM_SYNCHRONIZE
+        value: 'true'
+      - key: SEED_ON_START
+        value: 'true'
+      - key: ALLOW_VERCEL_PREVIEWS
+        value: 'true'
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRATION
+        value: 7d
+      - key: ADMIN_EMAIL
+        value: admin@medesign.com
+      - key: ADMIN_PASSWORD
+        value: admin123
+      - key: CORS_ORIGIN
+        value: https://medesign.vercel.app

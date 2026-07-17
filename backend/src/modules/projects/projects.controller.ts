@@ -23,6 +23,11 @@ export class ProjectsController {
     return this.projectsService.findAll()
   }
 
+  @Get('slug/:slug')
+  async findBySlug(@Param('slug') slug: string): Promise<Project> {
+    return this.projectsService.findBySlug(slug)
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(id)
