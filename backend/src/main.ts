@@ -17,18 +17,17 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      if (
+      const allowed =
         !origin ||
         allowedOrigins.includes(origin) ||
         (allowVercelPreviews && origin.endsWith('.vercel.app'))
-      ) {
-        callback(null, true)
-        return
-      }
 
-      callback(new Error(`Origin ${origin} not allowed by CORS`))
+      // Reject without throwing — a thrown Error often omits CORS headers on preflight
+      callback(null, allowed)
     },
     credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 
   app.useGlobalPipes(

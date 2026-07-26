@@ -41,4 +41,4 @@ services:
       - key: ADMIN_PASSWORD
         value: admin123
       - key: CORS_ORIGIN
-        value: https://medesign.digitals,https://www.medesign.digitals,https://medesign.vercel.app
+        value: https://medesign.digitals,https://www.medesign.digitals,https://med-design.vercel.app,https://medesign.vercel.app
