@@ -13,7 +13,7 @@ loadEnv()
 const entities = [Project, Service, TeamMember, BlogPost, ContactMessage, User]
 
 const isProduction = process.env.NODE_ENV === 'production'
-const databaseUrl = process.env.DATABASE_URL
+const databaseUrl = process.env.DATABASE_URL?.trim()
 
 const shared: Pick<
   TypeOrmModuleOptions,
@@ -26,19 +26,32 @@ const shared: Pick<
   dropSchema: false,
 }
 
-export const typeOrmConfig: TypeOrmModuleOptions = databaseUrl
-  ? {
+function buildTypeOrmConfig(): TypeOrmModuleOptions {
+  if (databaseUrl) {
+    return {
       type: 'postgres',
       url: databaseUrl,
+      // Render Postgres requires SSL; rejectUnauthorized:false for their managed certs
       ssl: isProduction ? { rejectUnauthorized: false } : false,
       ...shared,
     }
-  : {
-      type: 'postgres',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432', 10),
-      username: process.env.DB_USERNAME || 'postgres',
-      password: process.env.DB_PASSWORD || 'postgres',
-      database: process.env.DB_DATABASE || 'medesign',
-      ...shared,
-    }
+  }
+
+  if (isProduction) {
+    throw new Error(
+      'DATABASE_URL is required in production. Link your Render Postgres database to this service (Environment → DATABASE_URL).',
+    )
+  }
+
+  return {
+    type: 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432', 10),
+    username: process.env.DB_USERNAME || 'postgres',
+    password: process.env.DB_PASSWORD || 'postgres',
+    database: process.env.DB_DATABASE || 'medesign',
+    ...shared,
+  }
+}
+
+export const typeOrmConfig: TypeOrmModuleOptions = buildTypeOrmConfig()
