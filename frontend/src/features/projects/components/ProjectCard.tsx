@@ -16,11 +16,19 @@ export function ProjectCard({ project }: { project: Project }) {
           className="overflow-hidden rounded-3xl bg-ink shadow-card transition-shadow duration-300 group-hover:shadow-card-hover"
         >
           <div className="overflow-hidden">
-            <Placeholder
-              tone="dark"
-              label={project.category}
-              className="aspect-[4/3] w-full transition-transform duration-500 group-hover:scale-105"
-            />
+            {project.image ? (
+              <img
+                src={project.image}
+                alt={project.title}
+                className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            ) : (
+              <Placeholder
+                tone="dark"
+                label={project.category}
+                className="aspect-[4/3] w-full transition-transform duration-500 group-hover:scale-105"
+              />
+            )}
           </div>
           <div className="flex items-center justify-between gap-4 p-5">
             <div>

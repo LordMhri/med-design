@@ -238,6 +238,9 @@ function LatestProjectCard({ project }: { project: Project }) {
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       className="group relative aspect-[4/5] w-full bg-ink rounded-[2rem] overflow-hidden shadow-card hover:shadow-card-hover cursor-pointer"
     >
+      {project.image ? (
+        <img src={project.image} alt={project.title} className="absolute inset-0 h-full w-full object-cover" />
+      ) : null}
       <Link to={`/work/${project.slug}`} className="absolute inset-0 p-6 flex flex-col justify-end">
         {/* Dark overlay background for readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent opacity-75 transition-opacity duration-300 group-hover:opacity-90" />
