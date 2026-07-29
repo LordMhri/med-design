@@ -55,18 +55,18 @@ function HomeHero() {
               variants={fadeInUp}
               className="max-w-3xl text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-[3.75rem] mx-auto"
             >
-              Transform Healthcare
+              Creative Marketing for
               <br />
-              Brands With Creative
+              Healthcare That Builds
               <br />
-              <span className="text-accent">Digital Solutions.</span>
+              <span className="text-accent">Trust.</span>
             </motion.h1>
 
             <motion.p
               variants={fadeInUp}
               className="mt-6 max-w-xl text-sm leading-relaxed text-white/70 mx-auto"
             >
-              {INTRO}
+              We help hospitals, clinics, and healthcare brands grow with purpose — combining design, strategy, and data‑driven marketing to inspire confidence and lasting connections.
             </motion.p>
           </motion.div>
         </div>
@@ -93,7 +93,7 @@ function HomeHero() {
         >
           <span />
           <span className="flex items-center">
-            Get Started
+            Let&apos;s build your healthcare brand together
             <ArrowRight className="ml-2 h-4 w-4" />
           </span>
         </a>
@@ -171,7 +171,7 @@ function LatestProjects() {
             latest projects
           </span>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-ink leading-snug">
-            Every project we deliver is more than design it&apos;s measurable impact. From building patient trust through rebranding to increasing appointments through marketing, we turn ideas into results.
+            At MEDesign, we combine creative design, strategy, and data-driven marketing to help healthcare brands grow with purpose.
           </h2>
           <Link
             to="/work"
@@ -268,7 +268,7 @@ function Partnerships() {
             Partner<span className="text-accent">ships</span>
           </>
         }
-        description={INTRO}
+        description="We're proud to collaborate with leading hospitals, clinics, and healthcare brands across Ethiopia."
       />
 
       {/* Logo marquee */}

@@ -15,7 +15,7 @@ export default function About() {
     <>
       <PageHero
         title={<span className="text-accent">About</span>}
-        subtitle="We’re not just another marketing agency—we specialize in the medical field. With deep industry understanding and creative excellence, MEDesign delivers results that elevate your brand, attract patients, and strengthen your digital presence in the competitive healthcare market."
+        subtitle="At MEDesign, we bridge the gap between medicine and marketing. Our team of healthcare‑savvy creatives helps hospitals, clinics, and medical brands tell their stories with clarity, trust, and innovation — from strategy to visuals, and from concept to patient connection."
       />
 
       <OurStory />
@@ -85,12 +85,12 @@ function MissionValues() {
         align="center"
         title={
           <>
-            Mission <span className="text-accent">&amp; Values</span>
+            Vision <span className="text-accent">&amp; Mission</span>
           </>
         }
-        description="What drives us to deliver excellence every day."
+        description="What drives us every day."
       />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2">
         {VALUES.map((value) => (
           <motion.article
             key={value.title}

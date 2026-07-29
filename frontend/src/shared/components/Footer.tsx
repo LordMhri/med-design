@@ -12,10 +12,11 @@ const COMPANY_LINKS = [
 ]
 
 const SERVICE_LINKS = [
-  { label: 'Web Development', to: '/services' },
-  { label: 'UI UX Design', to: '/services' },
-  { label: 'Brand Identity', to: '/services' },
-  { label: 'Digital Marketing', to: '/services' },
+  { label: 'Branding & Identity', to: '/services' },
+  { label: 'Marketing & Growth', to: '/services' },
+  { label: 'Multimedia Production', to: '/services' },
+  { label: 'Website & Digital Solutions', to: '/services' },
+  { label: 'Marketing Materials & Creative Design', to: '/services' },
 ]
 
 const SOCIALS = [

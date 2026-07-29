@@ -1,10 +1,18 @@
 import { PenTool, TrendingUp, Award } from '@/shared/components/Icon'
 
 export const VALUES = [
-  { title: 'Creative Excellence', description: 'We push boundaries in design', icon: PenTool },
-  { title: 'Data-Driven', description: 'Decisions backed by analytics', icon: TrendingUp },
-  { title: 'Healthcare Focus', description: 'Deep medical industry expertise', icon: Award },
-  { title: 'Results-Oriented', description: 'Proven track record of success', icon: Award },
+  {
+    title: 'Vision',
+    description:
+      'To become Ethiopia\u2019s leading healthcare marketing and multimedia agency, empowering healthcare organizations to build trust, strengthen their brands, and positively impact the communities they serve.',
+    icon: TrendingUp,
+  },
+  {
+    title: 'Mission',
+    description:
+      'MEDesign partners with healthcare institutions to deliver strategic branding, multimedia production, digital marketing, and communication solutions that enhance visibility, improve patient engagement, and support sustainable organizational growth.',
+    icon: Award,
+  },
 ]
 
 export const ABOUT_STATS = [
@@ -14,10 +22,31 @@ export const ABOUT_STATS = [
 ]
 
 export const COMPANY_REASONS = [
-  { title: 'Creative Excellence', description: 'Industry-leading design solutions' },
-  { title: 'Data-Driven Approach', description: 'Decisions backed by analytics' },
-  { title: 'Healthcare Expertise', description: 'Deep medical industry knowledge' },
-  { title: 'Proven Results', description: 'Track record of successful campaigns' },
+  {
+    title: 'Healthcare-Focused Expertise',
+    description:
+      'We work exclusively with healthcare organizations, giving us a deep understanding of healthcare communication and patient engagement.',
+  },
+  {
+    title: 'Strategic & Creative Approach',
+    description:
+      'We combine marketing strategy with creative execution to deliver measurable results.',
+  },
+  {
+    title: 'Industry Understanding',
+    description:
+      'We understand the importance of trust, professionalism, and credibility in healthcare marketing.',
+  },
+  {
+    title: 'Tailored Solutions',
+    description:
+      'Every solution is customized to meet the unique goals and challenges of each healthcare organization.',
+  },
+  {
+    title: 'Long-Term Partnership',
+    description:
+      'We focus on building lasting relationships that contribute to sustainable organizational growth.',
+  },
 ]
 
 export const TEAM_TESTIMONIALS = [

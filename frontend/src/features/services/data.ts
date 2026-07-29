@@ -5,71 +5,89 @@ import {
   Globe,
   Megaphone,
   Camera,
-  Edit,
-  Share,
-  FileText,
-  TrendingUp,
 } from '@/shared/components/Icon'
 
 export type ServiceItem = {
   title: string
   description: string
+  services: string[]
   icon: ComponentType<SVGProps<SVGSVGElement>>
 }
 
 export const SERVICES: ServiceItem[] = [
   {
-    title: 'Logo Design',
+    title: 'Branding & Identity',
     description:
-      'Crafting unique and memorable logos that represent the essence of your medical brand, ensuring it stands out in a competitive market.',
+      'We helps healthcare organizations create professional and consistent brand identities that strengthen their reputation and connect with patients.',
+    services: [
+      'Brand Strategy',
+      'Brand Positioning & Messaging',
+      'Logo Design',
+      'Visual Identity Development',
+      'Brand Guidelines',
+      'Rebranding Solutions',
+    ],
     icon: PenTool,
   },
   {
-    title: 'Brand Identity Development',
+    title: 'Marketing & Growth',
     description:
-      'Building cohesive brand systems, including logos, color palettes, typography, and design guidelines, to establish a strong and consistent visual identity.',
-    icon: Layers,
-  },
-  {
-    title: 'Website Design & Management',
-    description:
-      'Creating responsive, user-friendly websites tailored for the healthcare industry, paired with ongoing management to ensure seamless performance and updates.',
-    icon: Globe,
-  },
-  {
-    title: 'PPC (Pay-Per-Click) Advertising',
-    description:
-      'Designing targeted and compelling social media advertisements that drive engagement, attract new patients, and boost your brand\u2019s online presence.',
+      'We develop strategic marketing campaigns that increase visibility, strengthen patient engagement, and support organizational growth.',
+    services: [
+      'Social Media Management',
+      'Content Marketing',
+      'SEO',
+      'Paid Advertising (Google, Facebook & Instagram Ads)',
+      'Email Marketing',
+      'Marketing Strategy Development',
+      'Campaign Planning & Management',
+    ],
     icon: Megaphone,
   },
   {
-    title: 'Professional Medical Photoshoot',
+    title: 'Multimedia Production',
     description:
-      'Delivering high-quality photography services to showcase your facilities, team, and services with professionalism and authenticity.',
+      'Our team creates high-quality multimedia content designed to educate, inform, and engage your audience.',
+    services: [
+      'Promotional Video Production',
+      'Medical Photography',
+      'Video Editing',
+      'Motion Graphics',
+      'Health Awareness Campaign Content',
+      'Copywriting & Storytelling',
+      'Infographics & Educational Visuals',
+    ],
     icon: Camera,
   },
   {
-    title: 'Content Creation',
+    title: 'Website & Digital Solutions',
     description:
-      'Producing engaging and informative content\u2014ranging from videos to graphics\u2014that resonates with your audience and reflects your brand\u2019s values.',
-    icon: Edit,
+      'We design and manage healthcare-focused digital platforms that deliver results.',
+    services: [
+      'Website Design',
+      'Website Development',
+      'Website Management',
+      'Landing Page Development',
+      'User Experience (UX/UI) Design',
+      'Website Analytics & Performance Tracking',
+    ],
+    icon: Globe,
   },
   {
-    title: 'Social Media Management',
+    title: 'Marketing Materials & Creative Design',
     description:
-      'Curating and maintaining your social media presence to build engagement, grow followers, and strengthen your brand voice.',
-    icon: Share,
-  },
-  {
-    title: 'Brochures & Flyers',
-    description:
-      'Designing professional print materials that effectively communicate your services and brand message to your target audience.',
-    icon: FileText,
-  },
-  {
-    title: 'Content Marketing',
-    description:
-      'Developing and executing content strategies that build authority, drive organic traffic, and convert visitors into loyal patients.',
-    icon: TrendingUp,
+      'Professional marketing materials that communicate your message clearly and effectively.',
+    services: [
+      'Brochures',
+      'Flyers',
+      'Posters',
+      'Roll-Up Banners',
+      'Billboards',
+      'Hospital Signage Design',
+      'Corporate Presentation Design',
+      'Social Media Graphics',
+      'Digital Advertising Creatives',
+    ],
+    icon: Layers,
   },
 ]

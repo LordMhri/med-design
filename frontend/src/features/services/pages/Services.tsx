@@ -13,7 +13,7 @@ export default function Services() {
   return (
     <>
       <PageHero
-        title={<>Servic<span className="text-accent">es</span></>}
+        title={<>Our Servic<span className="text-accent">es</span></>}
         subtitle="At MEDesign, we combine creative design, strategy, and data-driven marketing to help healthcare brands grow with purpose."
       />
 
@@ -52,8 +52,8 @@ function CustomCtaBand() {
             <span className="text-accent">custom</span> for you.
           </motion.h2>
           <motion.p variants={fadeInUp} className="max-w-xl text-sm leading-relaxed text-white/70">
-            Whatever your healthcare brand needs, we&apos;ll build a tailored package that aligns
-            with your goals — combining strategy, design, and marketing to deliver real results.
+            Need more? We&apos;ll craft a program tailored to your unique brand needs — elevating
+            your digital experience and evolving your marketing strategies to drive radical results.
           </motion.p>
           <motion.div variants={fadeInUp}>
             <Button to="/contact" size="lg">

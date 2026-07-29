@@ -13,6 +13,18 @@ export function ServiceCard({ service }: { service: ServiceItem }) {
       <IconChip icon={service.icon} />
       <h3 className="text-xl font-bold text-ink mt-2">{service.title}</h3>
       <p className="text-sm text-slate-body leading-relaxed">{service.description}</p>
+      {service.services && service.services.length > 0 && (
+        <ul className="mt-2 flex flex-wrap gap-2">
+          {service.services.map((s) => (
+            <li
+              key={s}
+              className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-body"
+            >
+              {s}
+            </li>
+          ))}
+        </ul>
+      )}
     </motion.div>
   )
 }

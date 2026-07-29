@@ -30,7 +30,7 @@ export default function Work() {
     <>
       <PageHero
         title={<span className="text-accent">Work</span>}
-        subtitle="We're not just another marketing agency—we specialize in the medical field. With deep industry understanding and creative excellence, MEDesign delivers results that elevate your brand, attract patients, and strengthen your digital presence in the competitive healthcare market."
+        subtitle="Every project we deliver is more than design — it's measurable impact. From hospital rebrands that boost patient trust, to digital campaigns that increase appointment bookings, our work reflects a passion for turning ideas into results. We craft healthcare stories that inspire confidence, drive growth, and make a difference in people's lives."
       />
 
       <Section>

@@ -47,10 +47,7 @@ function BlogHero() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="mt-6 max-w-2xl text-sm leading-relaxed text-white/70"
             >
-              We're not just another marketing agency—we specialize in the medical field. With deep
-              industry understanding and creative excellence, MEDesign delivers results that elevate
-              your brand, attract patients, and strengthen your digital presence in the competitive
-              healthcare market.
+              Your visionary partners in medical marketing. At MEDesign, we craft highly intentional branding and digital experiences, ensuring your healthcare brand grows authentically, predictably, and with clear purpose.
             </motion.p>
           </motion.div>
         </div>
