@@ -4,6 +4,8 @@ import {
   LayoutDashboard,
   FileText,
   Briefcase,
+  Users,
+  Settings,
   MessageSquare,
   LogOut,
 } from '@/shared/components/Icon'
@@ -13,6 +15,8 @@ const links = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/admin/blog', label: 'Blog Posts', icon: FileText },
   { to: '/admin/projects', label: 'Projects', icon: Briefcase },
+  { to: '/admin/team', label: 'Team Members', icon: Users },
+  { to: '/admin/services', label: 'Services', icon: Settings },
   { to: '/admin/messages', label: 'Messages', icon: MessageSquare },
 ]
 

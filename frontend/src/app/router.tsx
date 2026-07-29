@@ -19,6 +19,10 @@ const BlogEditor = lazy(() => import('@/features/admin/pages/BlogEditor'))
 const ProjectList = lazy(() => import('@/features/admin/pages/ProjectList'))
 const ProjectEditor = lazy(() => import('@/features/admin/pages/ProjectEditor'))
 const Messages = lazy(() => import('@/features/admin/pages/Messages'))
+const TeamList = lazy(() => import('@/features/admin/pages/TeamList'))
+const TeamEditor = lazy(() => import('@/features/admin/pages/TeamEditor'))
+const ServiceList = lazy(() => import('@/features/admin/pages/ServiceList'))
+const ServiceEditor = lazy(() => import('@/features/admin/pages/ServiceEditor'))
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +55,12 @@ export const router = createBrowserRouter([
       { path: 'projects', element: <ProjectList /> },
       { path: 'projects/new', element: <ProjectEditor /> },
       { path: 'projects/:id/edit', element: <ProjectEditor /> },
+      { path: 'team', element: <TeamList /> },
+      { path: 'team/new', element: <TeamEditor /> },
+      { path: 'team/:id/edit', element: <TeamEditor /> },
+      { path: 'services', element: <ServiceList /> },
+      { path: 'services/new', element: <ServiceEditor /> },
+      { path: 'services/:id/edit', element: <ServiceEditor /> },
       { path: 'messages', element: <Messages /> },
     ],
   },

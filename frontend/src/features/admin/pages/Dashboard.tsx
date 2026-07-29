@@ -4,21 +4,27 @@ import { StatsCard } from '@/features/admin/components/StatsCard'
 import { getBlogPosts } from '@/features/admin/blogStore'
 import { getProjects } from '@/features/admin/projectStore'
 import { getMessages, getUnreadCount } from '@/features/admin/messageStore'
+import { getTeamMembers } from '@/features/admin/teamStore'
+import { getServices } from '@/features/admin/serviceStore'
 import type { BlogPost } from '@/api/types'
 import type { Project } from '@/api/types'
 import type { ContactMessage } from '@/api/types'
-import { FileText, Briefcase, MessageSquare, Eye } from '@/shared/components/Icon'
+import { FileText, Briefcase, MessageSquare, Eye, Users, Settings } from '@/shared/components/Icon'
 
 export default function Dashboard() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
   const [projects, setProjects] = useState<Project[]>([])
   const [messages, setMessages] = useState<ContactMessage[]>([])
+  const [teamCount, setTeamCount] = useState(0)
+  const [servicesCount, setServicesCount] = useState(0)
   const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
     getBlogPosts().then(setBlogPosts).catch(() => {})
     getProjects().then(setProjects).catch(() => {})
     getMessages().then(setMessages).catch(() => {})
+    getTeamMembers().then((items) => setTeamCount(items.length)).catch(() => {})
+    getServices().then((items) => setServicesCount(items.length)).catch(() => {})
     getUnreadCount().then(setUnreadCount).catch(() => {})
   }, [])
 
@@ -26,9 +32,11 @@ export default function Dashboard() {
     <div>
       <h1 className="mb-6 text-2xl font-bold text-ink">Dashboard</h1>
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         <StatsCard label="Blog Posts" value={blogPosts.length} icon={<FileText className="h-6 w-6" />} />
         <StatsCard label="Projects" value={projects.length} icon={<Briefcase className="h-6 w-6" />} />
+        <StatsCard label="Team" value={teamCount} icon={<Users className="h-6 w-6" />} />
+        <StatsCard label="Services" value={servicesCount} icon={<Settings className="h-6 w-6" />} />
         <StatsCard label="Messages" value={messages.length} icon={<MessageSquare className="h-6 w-6" />} />
         <StatsCard
           label="Unread"
