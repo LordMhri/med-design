@@ -12,8 +12,6 @@ import { fadeInUp, revealOnce, staggerContainer } from '@/shared/lib/motion'
 import { fetchProjects, type Project } from '@/features/projects/data'
 import { TESTIMONIALS } from '@/features/team/data'
 
-const INTRO =
-  'At MEDesign, we combine creative design, strategy, and data-driven marketing to help healthcare brands grow with purpose.'
 
 export default function Home() {
   return (
