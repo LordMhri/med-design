@@ -26,7 +26,7 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        'mb-10 flex flex-col gap-4 lg:mb-14',
+        'mb-8 flex flex-col gap-3 sm:mb-10 sm:gap-4 lg:mb-14',
         align === 'center'
           ? 'items-center text-center'
           : 'lg:flex-row lg:items-end lg:justify-between',
@@ -36,7 +36,7 @@ export function SectionHeading({
       <motion.h2
         variants={fadeInUp}
         className={cn(
-          'max-w-xl text-3xl font-extrabold leading-tight sm:text-4xl lg:text-[2.75rem]',
+          'max-w-xl text-2xl font-extrabold leading-tight sm:text-4xl lg:text-[2.75rem]',
           align === 'center' && 'mx-auto',
           tone === 'dark' ? 'text-ink' : 'text-white',
         )}

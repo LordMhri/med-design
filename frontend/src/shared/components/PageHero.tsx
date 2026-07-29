@@ -18,7 +18,7 @@ type Props = {
  */
 export function PageHero({ title, subtitle, children }: Props) {
   return (
-    <section className="relative w-full pt-4 pb-12 sm:pb-16">
+    <section className="relative w-full pt-4 pb-10 sm:pb-16">
       <div className="relative">
         {/* Masked frame — height driven by native aspect ratio, not content */}
         <div className="hero-frame hero-mask overflow-hidden">
@@ -31,7 +31,7 @@ export function PageHero({ title, subtitle, children }: Props) {
           <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-ink/30" />
         </div>
 
-        <Container className="absolute inset-0 z-10 flex items-center justify-center">
+        <Container className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-6">
           <motion.div
             variants={staggerContainer(0.12)}
             initial="hidden"
@@ -40,14 +40,14 @@ export function PageHero({ title, subtitle, children }: Props) {
           >
             <motion.h1
               variants={fadeInUp}
-              className="max-w-4xl text-5xl font-extrabold leading-[1.05] text-white sm:text-6xl lg:text-7xl"
+              className="max-w-4xl text-3xl font-extrabold leading-[1.1] text-white sm:text-5xl lg:text-7xl"
             >
               {title}
             </motion.h1>
             {subtitle ? (
               <motion.p
                 variants={fadeInUp}
-                className="mt-6 max-w-2xl text-base leading-relaxed text-white/70 mx-auto"
+                className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70 mx-auto sm:mt-6 sm:text-base"
               >
                 {subtitle}
               </motion.p>

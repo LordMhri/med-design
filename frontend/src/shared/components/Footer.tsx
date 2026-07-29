@@ -16,7 +16,7 @@ const SERVICE_LINKS = [
   { label: 'Marketing & Growth', to: '/services' },
   { label: 'Multimedia Production', to: '/services' },
   { label: 'Website & Digital Solutions', to: '/services' },
-  { label: 'Marketing Materials & Creative Design', to: '/services' },
+  { label: 'Marketing Materials, Events & Creative Support', to: '/services' },
 ]
 
 const SOCIALS = [
@@ -55,7 +55,7 @@ export function Footer() {
                   <Link
                     key={l.label}
                     to={l.to}
-                    className="text-sm text-white/60 transition-colors hover:text-accent"
+                    className="text-sm text-white/60 transition-colors hover:text-accent break-words"
                   >
                     {l.label}
                   </Link>

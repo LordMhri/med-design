@@ -8,17 +8,17 @@ export function ServiceCard({ service }: { service: ServiceItem }) {
       whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-card hover:shadow-card-hover cursor-pointer flex flex-col items-start gap-4"
+      className="group bg-white rounded-2xl sm:rounded-[2rem] p-5 sm:p-8 border border-slate-100 shadow-card hover:shadow-card-hover cursor-pointer flex flex-col items-start gap-3 sm:gap-4"
     >
       <IconChip icon={service.icon} />
-      <h3 className="text-xl font-bold text-ink mt-2">{service.title}</h3>
+      <h3 className="text-lg sm:text-xl font-bold text-ink mt-1 sm:mt-2">{service.title}</h3>
       <p className="text-sm text-slate-body leading-relaxed">{service.description}</p>
       {service.services && service.services.length > 0 && (
-        <ul className="mt-2 flex flex-wrap gap-2">
+        <ul className="mt-1 sm:mt-2 flex flex-wrap gap-1.5 sm:gap-2">
           {service.services.map((s) => (
             <li
               key={s}
-              className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-body"
+              className="rounded-full bg-slate-50 px-2.5 py-1 text-[11px] sm:text-xs font-medium text-slate-body leading-snug"
             >
               {s}
             </li>

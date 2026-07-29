@@ -37,7 +37,6 @@ export const PROJECTS: Project[] = [
     tags: ['Branding', 'Strategy'],
     description:
       'We redesigned the clinic brand system, messaging tone, and visual language to make patient communication clearer and more consistent across digital and print assets.',
-    image: '/team-sara.png',
   },
   {
     id: 'project-2',
@@ -48,7 +47,6 @@ export const PROJECTS: Project[] = [
     tags: ['Campaign', 'Social Media'],
     description:
       'Our team launched multi-channel campaign creatives and weekly performance optimization that increased appointment intent and improved engagement quality.',
-    image: '/team-meheret.png',
   },
   {
     id: 'project-3',
@@ -59,7 +57,6 @@ export const PROJECTS: Project[] = [
     tags: ['Video', 'Content'],
     description:
       'We produced short-form health education videos, motion graphics, and awareness visuals designed to simplify complex medical information for the public.',
-    image: '/team-yeabtsega.png',
   },
 ]
 

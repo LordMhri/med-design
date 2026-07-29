@@ -71,10 +71,10 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-[#0b2b3a]/90 rounded-[2.5rem] border border-white/10 p-8 sm:p-12 lg:p-16 text-left max-w-5xl mx-auto shadow-2xl backdrop-blur-sm"
+      className="bg-[#0b2b3a]/90 rounded-3xl sm:rounded-[2.5rem] border border-white/10 p-5 sm:p-8 lg:p-16 text-left max-w-5xl mx-auto shadow-2xl backdrop-blur-sm"
     >
       <div>
-        <h2 className="text-3xl font-extrabold text-white">Let&apos;s Create Radical.</h2>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Let&apos;s Create Radical.</h2>
         <p className="text-sm text-white/60 mt-2">
           Please fill in the form below. We&apos;ll aim to reply within 1 business day.
         </p>

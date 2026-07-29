@@ -27,9 +27,9 @@ export function TeamCard({ member }: { member: Member }) {
           className="aspect-[4/5] w-full transition-transform duration-500 group-hover:scale-105"
         />
       )}
-      <div className="p-5">
+      <div className="p-4 sm:p-5">
         <h3 className="text-base font-bold text-white">{member.name}</h3>
-        <p className="mt-1 text-xs font-medium uppercase tracking-wider text-accent">
+        <p className="mt-1 text-[11px] sm:text-xs font-medium uppercase tracking-wider text-accent leading-snug">
           {member.role}
         </p>
       </div>

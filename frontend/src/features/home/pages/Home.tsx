@@ -29,7 +29,7 @@ export default function Home() {
 /* ────────────────────────────────────────────────────────────────────── */
 function HomeHero() {
   return (
-    <section className="relative w-full pt-4 pb-16 sm:pb-20">
+    <section className="relative w-full pt-4 pb-28 sm:pb-20">
       <div className="relative">
         {/* Masked frame — height driven by native aspect ratio, not content */}
         <div className="hero-frame hero-mask overflow-hidden">
@@ -42,7 +42,7 @@ function HomeHero() {
           <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-ink/30" />
         </div>
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-6 sm:px-12 lg:px-16">
+        <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-12 lg:px-16">
           <motion.div
             variants={staggerContainer(0.14)}
             initial="hidden"
@@ -51,7 +51,7 @@ function HomeHero() {
           >
             <motion.h1
               variants={fadeInUp}
-              className="max-w-3xl text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-[3.75rem] mx-auto"
+              className="max-w-3xl text-3xl font-extrabold leading-[1.12] text-white sm:text-5xl lg:text-[3.75rem] mx-auto"
             >
               Creative Marketing for
               <br />
@@ -62,7 +62,7 @@ function HomeHero() {
 
             <motion.p
               variants={fadeInUp}
-              className="mt-6 max-w-xl text-sm leading-relaxed text-white/70 mx-auto"
+              className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 mx-auto sm:mt-6"
             >
               We help hospitals, clinics, and healthcare brands grow with purpose — combining design, strategy, and data‑driven marketing to inspire confidence and lasting connections.
             </motion.p>
@@ -74,27 +74,28 @@ function HomeHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="absolute bottom-0 left-0 right-0 z-10 flex translate-y-1/2 items-center justify-between gap-4 px-2 sm:px-3 lg:px-4"
+          className="absolute bottom-0 left-0 right-0 z-10 flex translate-y-1/2 flex-col items-stretch gap-3 px-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-3 lg:px-4"
         >
-        {/* Circles container (aligned with bottom-left cutout) */}
-        <div className="flex items-center gap-1.5 rounded-full bg-white p-1.5 shadow-sm shrink-0">
+        {/* Circles container (hidden on small screens to save space) */}
+        <div className="hidden sm:flex items-center gap-1.5 rounded-full bg-white p-1.5 shadow-sm shrink-0">
           <span className="h-10 w-10 rounded-full bg-ink" />
           <span className="h-10 w-10 rounded-full bg-accent" />
           <span className="h-10 w-10 rounded-full bg-ink" />
           <span className="h-10 w-10 rounded-full bg-accent" />
         </div>
 
-        {/* Wide green bar with "Get Started" (aligned with bottom-right cutout) */}
-        <a
-          href="/contact"
-          className="flex flex-1 max-w-[360px] sm:max-w-[900px] ml-auto items-center justify-between rounded-full bg-accent px-8 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
+        {/* Green CTA bar */}
+        <Link
+          to="/contact"
+          className="flex w-full sm:flex-1 sm:max-w-[900px] sm:ml-auto items-center justify-center rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-ink transition-colors hover:bg-accent-hover sm:justify-between sm:px-8 sm:py-4"
         >
-          <span />
-          <span className="flex items-center">
+          <span className="sm:hidden">Get started</span>
+          <span className="hidden sm:inline" />
+          <span className="hidden sm:flex items-center">
             Let&apos;s build your healthcare brand together
             <ArrowRight className="ml-2 h-4 w-4" />
           </span>
-        </a>
+        </Link>
         </motion.div>
       </div>
     </section>
@@ -162,13 +163,13 @@ function LatestProjects() {
 
   return (
     <Section>
-      <div className="grid gap-12 lg:grid-cols-12 items-center">
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12 items-center">
         {/* Left column - Heading & CTA */}
-        <div className="lg:col-span-5 flex flex-col items-start text-left gap-6">
+        <div className="lg:col-span-5 flex flex-col items-start text-left gap-4 sm:gap-6">
           <span className="inline-flex rounded-full border border-accent/40 bg-accent/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
             latest projects
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-ink leading-snug">
+          <h2 className="text-xl sm:text-3xl font-extrabold text-ink leading-snug">
             At MEDesign, we combine creative design, strategy, and data-driven marketing to help healthcare brands grow with purpose.
           </h2>
           <Link
@@ -274,7 +275,7 @@ function Partnerships() {
 
       {/* Logo marquee */}
       <div className="relative mb-14 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-        <div className="flex w-max animate-marquee items-center gap-16">
+        <div className="flex w-max animate-marquee items-center gap-8 sm:gap-16">
           {Array.from({ length: 10 }).map((_, i) => (
             <Logo key={i} variant="dark" className="text-2xl opacity-60" />
           ))}

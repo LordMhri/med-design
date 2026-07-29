@@ -6,14 +6,19 @@ export type Member = {
 
 export const TEAM: Member[] = [
   {
-    name: 'Meheret Alemu',
-    role: 'Software Engineer & Head of MED IT Department',
-    image: '/team-meheret.png',
+    name: 'Eyasu Kebede',
+    role: 'CEO and Creative Director',
+    image: '/team-eyasu.png',
   },
   {
     name: 'Dr. Sara Tekle',
     role: 'Medical Doctor, Marketing Expert & Head of MED Marketing Department',
     image: '/team-sara.png',
+  },
+  {
+    name: 'Meheret Alemu',
+    role: 'Software Engineer & Head of MED IT Department',
+    image: '/team-meheret.png',
   },
   {
     name: 'Yeabtsega Mekonnen',
