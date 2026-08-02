@@ -133,6 +133,16 @@
     aspect-ratio: 2141 / 1100;
   }
 
+  /* Home desktop: fill the first viewport (mask still applies via .hero-mask) */
+  .hero-frame-viewport {
+    aspect-ratio: auto;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-height: none;
+  }
+
   /* Mobile: true first-screen immersion, edge-to-edge, full viewport */
   @media (max-width: 639px) {
     .hero-frame {
@@ -155,9 +165,14 @@
   }
 
   @media (orientation: landscape) and (max-height: 500px) and (min-width: 640px) {
-    .hero-frame {
+    .hero-frame:not(.hero-frame-viewport) {
       aspect-ratio: 16 / 7;
       max-height: 70vh;
+    }
+
+    .hero-frame-viewport {
+      min-height: 100%;
+      height: 100%;
     }
   }
 

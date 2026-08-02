@@ -14,48 +14,12 @@ import { PARTNER_NAMES, TESTIMONIALS } from '@/features/team/data'
 
 type Scene = 'hero' | 'main'
 
-function useIsNarrow() {
-  const [narrow, setNarrow] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 639px)')
-    const sync = () => setNarrow(mq.matches)
-    sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
-  }, [])
-
-  return narrow
-}
-
 export default function Home() {
-  const narrow = useIsNarrow()
-
-  // Avoid layout flash: wait for matchMedia, then pick mode.
-  if (narrow === null) {
-    return <div className="min-h-dvh bg-ink sm:min-h-0 sm:bg-transparent" />
-  }
-
-  if (narrow) return <HomeStaged />
-  return <HomeDesktop />
+  return <HomeStaged />
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
-/*  Desktop: normal document flow                                        */
-/* ────────────────────────────────────────────────────────────────────── */
-function HomeDesktop() {
-  return (
-    <>
-      <HomeHero />
-      <LatestProjects />
-      <Partnerships />
-      <TeamSection />
-    </>
-  )
-}
-
-/* ────────────────────────────────────────────────────────────────────── */
-/*  Mobile staged scenes: full viewport swap, no shared layers           */
+/*  Staged scenes: full viewport swap (mobile + desktop)                 */
 /* ────────────────────────────────────────────────────────────────────── */
 function HomeStaged() {
   const reduceMotion = useReducedMotion()
@@ -130,6 +94,32 @@ function HomeStaged() {
     return () => window.removeEventListener('wheel', onWheel)
   }, [goHero, goMain, scene])
 
+  // Keyboard: same discrete scene jump as wheel.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (locking.current) return
+      const keysDown = e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' '
+      const keysUp = e.key === 'ArrowUp' || e.key === 'PageUp'
+
+      if (scene === 'hero' && keysDown) {
+        e.preventDefault()
+        goMain()
+        return
+      }
+
+      if (scene === 'main' && keysUp) {
+        const panel = mainRef.current
+        if (panel && panel.scrollTop <= 2) {
+          e.preventDefault()
+          goHero()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [goHero, goMain, scene])
+
   const onTouchStart = (e: React.TouchEvent) => {
     touchY.current = e.touches[0]?.clientY ?? 0
   }
@@ -173,7 +163,7 @@ function HomeStaged() {
             exit={{ y: '-100%' }}
             transition={transition}
           >
-            <HomeHero immersive onContinue={goMain} />
+            <HomeHero onContinue={goMain} />
           </motion.div>
         ) : (
           <motion.section
@@ -201,41 +191,23 @@ function HomeStaged() {
 /* ────────────────────────────────────────────────────────────────────── */
 /*  Hero                                                                 */
 /* ────────────────────────────────────────────────────────────────────── */
-function HomeHero({
-  immersive = false,
-  onContinue,
-}: {
-  immersive?: boolean
-  onContinue?: () => void
-}) {
+function HomeHero({ onContinue }: { onContinue: () => void }) {
   const reduceMotion = useReducedMotion()
 
   return (
-    <section
-      className={
-        immersive
-          ? 'relative h-full w-full'
-          : 'relative w-full sm:pt-4 sm:pb-20'
-      }
-    >
+    <section className="relative h-full w-full">
       <div className="relative h-full w-full">
-        <div
-          className={
-            immersive
-              ? 'hero-frame hero-mask h-full min-h-0 overflow-hidden !rounded-none'
-              : 'hero-frame hero-mask overflow-hidden'
-          }
-        >
+        <div className="hero-frame hero-frame-viewport h-full min-h-0 overflow-hidden !rounded-none">
           <img
             src="/hero-bg.png"
             alt=""
-            className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-45 sm:object-center sm:opacity-60"
+            className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-45 sm:object-center sm:opacity-55"
           />
-          <div className="absolute inset-0 bg-ink/55 sm:bg-ink/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/45 sm:from-ink/90 sm:via-transparent sm:to-ink/30" />
+          <div className="absolute inset-0 bg-ink/55 sm:bg-ink/45" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/50 sm:from-ink/90 sm:via-ink/25 sm:to-ink/55" />
         </div>
 
-        <div className="absolute inset-0 z-10 flex w-full flex-col px-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(4.25rem,calc(env(safe-area-inset-top)+3rem))] sm:px-12 sm:pb-0 sm:pt-0 lg:px-16">
+        <div className="absolute inset-0 z-10 flex w-full flex-col px-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(4.25rem,calc(env(safe-area-inset-top)+3rem))] sm:px-12 sm:pb-28 sm:pt-[max(5rem,calc(env(safe-area-inset-top)+4rem))] lg:px-16">
           <motion.div
             variants={staggerContainer(0.12)}
             initial="hidden"
@@ -272,74 +244,57 @@ function HomeHero({
             </motion.p>
           </motion.div>
 
-          {/* Mobile: one primary action (work scene, or contact on desktop-flow) */}
+          {/* Mobile continue */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.45 }}
             className="flex w-full flex-col items-center gap-3 sm:hidden"
           >
-            {immersive && onContinue ? (
-              <>
-                <button
-                  type="button"
-                  onClick={onContinue}
-                  className="flex w-full items-center justify-center rounded-full bg-accent px-6 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
-                >
-                  See our work
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={onContinue}
-                  className="flex flex-col items-center gap-0.5 text-white/55 transition-colors hover:text-white/85"
-                  aria-label="Swipe up for work"
-                >
-                  <ChevronDown
-                    className={
-                      reduceMotion
-                        ? 'h-5 w-5'
-                        : 'h-5 w-5 animate-bounce'
-                    }
-                  />
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/contact"
-                className="flex w-full items-center justify-center rounded-full bg-accent px-6 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
-              >
-                Get started
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            )}
+            <button
+              type="button"
+              onClick={onContinue}
+              className="flex w-full items-center justify-center rounded-full bg-accent px-6 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
+            >
+              See our work
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={onContinue}
+              className="flex flex-col items-center gap-0.5 text-white/55 transition-colors hover:text-white/85"
+              aria-label="Swipe up for work"
+            >
+              <ChevronDown
+                className={reduceMotion ? 'h-5 w-5' : 'h-5 w-5 animate-bounce'}
+              />
+            </button>
           </motion.div>
         </div>
 
-        {/* Desktop: edge-straddle bar with dots + wide CTA */}
-        {!immersive ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-            className="absolute bottom-0 left-0 right-0 z-10 hidden translate-y-1/2 items-center justify-between gap-4 px-3 sm:flex lg:px-4"
-          >
-            <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-white p-1.5 shadow-sm">
-              <span className="h-10 w-10 rounded-full bg-ink" />
-              <span className="h-10 w-10 rounded-full bg-accent" />
-              <span className="h-10 w-10 rounded-full bg-ink" />
-              <span className="h-10 w-10 rounded-full bg-accent" />
-            </div>
+        {/* Desktop continue: same scene jump as wheel */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="absolute inset-x-0 bottom-0 z-10 hidden items-center justify-between gap-4 px-6 pb-8 sm:flex lg:px-8 lg:pb-10"
+        >
+          <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-white p-1.5 shadow-sm">
+            <span className="h-10 w-10 rounded-full bg-ink" />
+            <span className="h-10 w-10 rounded-full bg-accent" />
+            <span className="h-10 w-10 rounded-full bg-ink" />
+            <span className="h-10 w-10 rounded-full bg-accent" />
+          </div>
 
-            <Link
-              to="/contact"
-              className="ml-auto flex max-w-[900px] flex-1 items-center justify-end rounded-full bg-accent px-8 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
-            >
-              Let&apos;s build your healthcare brand together
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </motion.div>
-        ) : null}
+          <button
+            type="button"
+            onClick={onContinue}
+            className="ml-auto flex max-w-[900px] flex-1 items-center justify-end rounded-full bg-accent px-8 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
+          >
+            See our work
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </button>
+        </motion.div>
       </div>
     </section>
   )

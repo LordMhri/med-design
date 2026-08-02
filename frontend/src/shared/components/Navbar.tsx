@@ -111,10 +111,7 @@ export function Navbar() {
             <Button
               to="/contact"
               size="sm"
-              className={cn(
-                'hidden sm:inline-flex',
-                overLightScene ? 'text-ink' : 'text-white',
-              )}
+              className="hidden sm:inline-flex"
             >
               Connect
             </Button>
