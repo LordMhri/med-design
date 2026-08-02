@@ -3,33 +3,33 @@ import { Placeholder } from '@/shared/components/Placeholder'
 import { fadeInUp } from '@/shared/lib/motion'
 import type { Member } from '../data'
 
-/** Dark team member card with portrait + name + role (pages 1 & 3). */
+/** Portrait-led team card: name sits under the photo, not on a heavy ink bar. */
 export function TeamCard({ member }: { member: Member }) {
   return (
     <motion.article
       variants={fadeInUp}
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-      className="group overflow-hidden rounded-3xl bg-ink shadow-card transition-shadow duration-300 hover:shadow-card-hover"
+      className="group"
     >
       {member.image ? (
-        <div className="aspect-[4/5] w-full overflow-hidden">
+        <div className="aspect-[4/5] w-full overflow-hidden rounded-[1.75rem]">
           <img
             src={member.image}
             alt={member.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         </div>
       ) : (
         <Placeholder
           tone="dark"
           label="Portrait"
-          className="aspect-[4/5] w-full transition-transform duration-500 group-hover:scale-105"
+          className="aspect-[4/5] w-full rounded-[1.75rem] transition-transform duration-500 group-hover:scale-[1.03]"
         />
       )}
-      <div className="p-4 sm:p-5">
-        <h3 className="text-base font-bold text-white">{member.name}</h3>
-        <p className="mt-1 text-[11px] sm:text-xs font-medium uppercase tracking-wider text-accent leading-snug">
+      <div className="pt-4">
+        <h3 className="text-base font-bold text-ink">{member.name}</h3>
+        <p className="mt-1 text-xs font-medium leading-snug tracking-wide text-slate-body sm:text-[0.8125rem]">
           {member.role}
         </p>
       </div>

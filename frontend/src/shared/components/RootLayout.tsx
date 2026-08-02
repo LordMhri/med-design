@@ -23,7 +23,7 @@ export function RootLayout() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="flex min-h-screen flex-col bg-white">
+      <div className="flex min-h-screen flex-col bg-white pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
         <Navbar />
         <main className="flex-1">
           <Suspense fallback={<PageFallback />}>

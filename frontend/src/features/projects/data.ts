@@ -32,31 +32,34 @@ export const PROJECTS: Project[] = [
     id: 'project-1',
     slug: 'st-mary-rebrand',
     title: 'St. Mary Specialty Clinic Rebrand',
-    excerpt: 'Unified brand identity that improved trust and recognition across patient touchpoints.',
+    excerpt: 'Unified brand identity across patient touchpoints.',
     category: 'Branding & Identity',
     tags: ['Branding', 'Strategy'],
     description:
       'We redesigned the clinic brand system, messaging tone, and visual language to make patient communication clearer and more consistent across digital and print assets.',
+    image: '/project-st-mary.jpg',
   },
   {
     id: 'project-2',
     slug: 'city-heart-campaign',
     title: 'City Heart Hospital Campaign',
-    excerpt: 'A digital growth campaign focused on awareness, bookings, and patient education.',
+    excerpt: 'Awareness, bookings, and patient education, grown together.',
     category: 'Marketing & Growth',
     tags: ['Campaign', 'Social Media'],
     description:
       'Our team launched multi-channel campaign creatives and weekly performance optimization that increased appointment intent and improved engagement quality.',
+    image: '/project-city-heart.jpg',
   },
   {
     id: 'project-3',
     slug: 'meded-learning-series',
     title: 'MedEd Learning Content Series',
-    excerpt: 'Educational multimedia assets crafted for patient awareness and retention.',
+    excerpt: 'Educational multimedia for patient awareness and retention.',
     category: 'Multimedia Production',
     tags: ['Video', 'Content'],
     description:
       'We produced short-form health education videos, motion graphics, and awareness visuals designed to simplify complex medical information for the public.',
+    image: '/project-meded.jpg',
   },
 ]
 

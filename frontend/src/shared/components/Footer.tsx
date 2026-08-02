@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Container } from '@/shared/components/Container'
-import { Mail, Phone, MapPin, Instagram, Linkedin, Twitter, Facebook } from '@/shared/components/Icon'
+import { Mail, Instagram, Linkedin, Twitter, Facebook } from '@/shared/components/Icon'
 import { fadeInUp, revealOnce, staggerContainer } from '@/shared/lib/motion'
 
 const COMPANY_LINKS = [
@@ -28,12 +28,14 @@ const SOCIALS = [
 
 export function Footer() {
   return (
-    <footer className="bg-ink text-white rounded-br-4xl">
+    <footer className="rounded-br-4xl bg-ink text-white">
       <motion.div variants={staggerContainer(0.08)} {...revealOnce}>
         <Container className="py-16 lg:py-20">
           <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             <motion.div variants={fadeInUp} className="flex flex-col gap-4">
-              <h2 className="text-4xl font-extrabold text-accent sm:text-5xl">Let&apos;s</h2>
+              <h2 className="text-4xl font-extrabold text-accent sm:text-5xl">
+                Let&apos;s talk.
+              </h2>
               <nav aria-label="Company" className="flex flex-col gap-3">
                 <p className="text-sm font-semibold text-white">Company</p>
                 {COMPANY_LINKS.map((l) => (
@@ -55,7 +57,7 @@ export function Footer() {
                   <Link
                     key={l.label}
                     to={l.to}
-                    className="text-sm text-white/60 transition-colors hover:text-accent break-words"
+                    className="break-words text-sm text-white/60 transition-colors hover:text-accent"
                   >
                     {l.label}
                   </Link>
@@ -73,16 +75,7 @@ export function Footer() {
                 >
                   <Mail className="h-4 w-4 text-accent" /> hello@medesign.com
                 </a>
-                <a
-                  href="tel:+15551234567"
-                  className="flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-accent"
-                >
-                  <Phone className="h-4 w-4 text-accent" /> +1 (555) 123-4567
-                </a>
-                <p className="flex items-start gap-2 text-sm text-white/60">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" /> 123 Design Street,
-                  Creative City, CC 12345
-                </p>
+                <p className="text-sm text-white/45">Based in Addis Ababa, Ethiopia</p>
                 <div className="mt-2 flex items-center gap-3">
                   {SOCIALS.map((s) => (
                     <a
@@ -101,10 +94,7 @@ export function Footer() {
             </motion.div>
           </div>
 
-          <motion.div
-            variants={fadeInUp}
-            className="mt-12 border-t border-white/10 pt-8"
-          >
+          <motion.div variants={fadeInUp} className="mt-12 border-t border-white/10 pt-8">
             <p className="text-xs text-white/50">
               © {new Date().getFullYear()} MEDesign. All rights reserved.
             </p>

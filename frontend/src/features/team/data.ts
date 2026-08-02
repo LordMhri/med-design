@@ -35,27 +35,37 @@ export type Testimonial = {
 
 export const TESTIMONIALS: Testimonial[] = [
   {
-    name: 'Lorem Ipsum',
-    title: 'Lorem ipsum',
+    name: 'Dr. Helen Assefa',
+    title: 'Medical Director, Addis Specialty Clinic',
     quote:
-      'Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet.',
+      'MEDesign gave our clinic a voice patients actually trust: clear, calm, and consistent from the waiting room to Instagram.',
   },
   {
-    name: 'Lorem Ipsum',
-    title: 'Lorem ipsum',
+    name: 'Abel Tadesse',
+    title: 'Marketing Lead, Nile Heart Center',
     quote:
-      'Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet.',
+      'They treated our campaign like clinical work: measured, iterative, and always about the patient outcome.',
   },
   {
-    name: 'Lorem Ipsum',
-    title: 'Lorem ipsum',
+    name: 'Sara Negash',
+    title: 'Founder, CarePath Diagnostics',
     quote:
-      'Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet.',
+      'From brand system to launch creatives, the team understood healthcare constraints without dulling the craft.',
   },
   {
-    name: 'Lorem Ipsum',
-    title: 'Lorem ipsum',
+    name: 'Yonatan Bekele',
+    title: 'Operations Manager, Horizon Hospitals',
     quote:
-      'Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet, consectetuer Lorem ipsum dolor sit amet.',
+      'Our digital presence finally matches the standard of care we deliver on the floor. That shift was overdue.',
   },
 ]
+
+/** Partner names shown as quiet wordmarks until official logos ship. */
+export const PARTNER_NAMES = [
+  'Addis Specialty Clinic',
+  'Nile Heart Center',
+  'CarePath Diagnostics',
+  'Horizon Hospitals',
+  'MedEd Ethiopia',
+  'St. Gabriel Care',
+] as const

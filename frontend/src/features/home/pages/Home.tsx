@@ -1,19 +1,49 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Section } from '@/shared/components/Section'
 import { SectionHeading } from '@/shared/components/SectionHeading'
 import { Carousel } from '@/shared/components/Carousel'
-import { Logo } from '@/shared/components/Logo'
+import { Footer } from '@/shared/components/Footer'
 import { TestimonialCard } from '@/shared/components/TestimonialCard'
 import { TeamSection } from '@/features/team/components/TeamSection'
-import { ArrowRight } from '@/shared/components/Icon'
-import { fadeInUp, revealOnce, staggerContainer } from '@/shared/lib/motion'
+import { ArrowRight, ChevronDown } from '@/shared/components/Icon'
+import { easeOut, fadeInUp, revealOnce, staggerContainer } from '@/shared/lib/motion'
 import { fetchProjects, type Project } from '@/features/projects/data'
-import { TESTIMONIALS } from '@/features/team/data'
+import { PARTNER_NAMES, TESTIMONIALS } from '@/features/team/data'
 
+type Scene = 'hero' | 'main'
+
+function useIsNarrow() {
+  const [narrow, setNarrow] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const sync = () => setNarrow(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
+  return narrow
+}
 
 export default function Home() {
+  const narrow = useIsNarrow()
+
+  // Avoid layout flash: wait for matchMedia, then pick mode.
+  if (narrow === null) {
+    return <div className="min-h-dvh bg-ink sm:min-h-0 sm:bg-transparent" />
+  }
+
+  if (narrow) return <HomeStaged />
+  return <HomeDesktop />
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/*  Desktop: normal document flow                                        */
+/* ────────────────────────────────────────────────────────────────────── */
+function HomeDesktop() {
   return (
     <>
       <HomeHero />
@@ -25,85 +55,298 @@ export default function Home() {
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
-/*  Hero — full-width background image with left-aligned text            */
+/*  Mobile staged scenes: full viewport swap, no shared layers           */
 /* ────────────────────────────────────────────────────────────────────── */
-function HomeHero() {
+function HomeStaged() {
+  const reduceMotion = useReducedMotion()
+  const [scene, setScene] = useState<Scene>('hero')
+  const locking = useRef(false)
+  const mainRef = useRef<HTMLElement>(null)
+  const touchY = useRef(0)
+
+  useEffect(() => {
+    document.body.classList.add('home-staged')
+    return () => {
+      document.body.classList.remove('home-staged')
+      document.body.classList.remove('home-staged-main')
+    }
+  }, [])
+
+  // Signal navbar: white scene needs solid bar + dark logo (window scroll stays at 0).
+  useEffect(() => {
+    document.body.classList.toggle('home-staged-main', scene === 'main')
+  }, [scene])
+
+  const transition = useMemo(
+    () => ({
+      duration: reduceMotion ? 0.01 : 0.75,
+      ease: easeOut,
+    }),
+    [reduceMotion],
+  )
+
+  const goMain = useCallback(() => {
+    if (locking.current || scene === 'main') return
+    locking.current = true
+    setScene('main')
+    window.setTimeout(() => {
+      locking.current = false
+    }, reduceMotion ? 20 : 780)
+  }, [reduceMotion, scene])
+
+  const goHero = useCallback(() => {
+    if (locking.current || scene === 'hero') return
+    locking.current = true
+    setScene('hero')
+    window.setTimeout(() => {
+      locking.current = false
+    }, reduceMotion ? 20 : 780)
+  }, [reduceMotion, scene])
+
+  // Wheel: commit to the other scene (not a soft scroll blend).
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      if (locking.current) {
+        e.preventDefault()
+        return
+      }
+
+      if (scene === 'hero' && e.deltaY > 12) {
+        e.preventDefault()
+        goMain()
+        return
+      }
+
+      if (scene === 'main' && e.deltaY < -12) {
+        const panel = mainRef.current
+        if (panel && panel.scrollTop <= 2) {
+          e.preventDefault()
+          goHero()
+        }
+      }
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [goHero, goMain, scene])
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchY.current = e.touches[0]?.clientY ?? 0
+  }
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (locking.current) return
+    const endY = e.changedTouches[0]?.clientY ?? touchY.current
+    const dy = touchY.current - endY
+
+    if (scene === 'hero' && dy > 56) {
+      goMain()
+      return
+    }
+
+    if (scene === 'main' && dy < -56) {
+      const panel = mainRef.current
+      if (panel && panel.scrollTop <= 2) goHero()
+    }
+  }
+
   return (
-    <section className="relative w-full pt-4 pb-28 sm:pb-20">
-      <div className="relative">
-        {/* Masked frame — height driven by native aspect ratio, not content */}
-        <div className="hero-frame hero-mask overflow-hidden">
+    <div
+      className="relative h-dvh w-full overflow-hidden bg-white"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* Spacer so layout main keeps height while scenes are fixed */}
+      <div className="h-dvh" aria-hidden />
+
+      {/*
+        sync: both panes move together so the ink/white underlay never
+        peeks through (mode=wait caused the brief dark-green flash).
+      */}
+      <AnimatePresence initial={false} mode="sync">
+        {scene === 'hero' ? (
+          <motion.div
+            key="scene-hero"
+            className="fixed inset-0 z-40 bg-ink"
+            initial={{ y: '-100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '-100%' }}
+            transition={transition}
+          >
+            <HomeHero immersive onContinue={goMain} />
+          </motion.div>
+        ) : (
+          <motion.section
+            key="scene-main"
+            ref={mainRef}
+            className="fixed inset-0 z-30 overflow-y-auto overscroll-y-contain bg-white pt-[max(4.75rem,calc(env(safe-area-inset-top)+3.75rem))]"
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={transition}
+          >
+            <div className="relative min-h-dvh">
+              <LatestProjects />
+              <Partnerships />
+              <TeamSection />
+              <Footer />
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/*  Hero                                                                 */
+/* ────────────────────────────────────────────────────────────────────── */
+function HomeHero({
+  immersive = false,
+  onContinue,
+}: {
+  immersive?: boolean
+  onContinue?: () => void
+}) {
+  const reduceMotion = useReducedMotion()
+
+  return (
+    <section
+      className={
+        immersive
+          ? 'relative h-full w-full'
+          : 'relative w-full sm:pt-4 sm:pb-20'
+      }
+    >
+      <div className="relative h-full w-full">
+        <div
+          className={
+            immersive
+              ? 'hero-frame hero-mask h-full min-h-0 overflow-hidden !rounded-none'
+              : 'hero-frame hero-mask overflow-hidden'
+          }
+        >
           <img
             src="/hero-bg.png"
             alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-60"
+            className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-45 sm:object-center sm:opacity-60"
           />
-          <div className="absolute inset-0 bg-ink/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-ink/30" />
+          <div className="absolute inset-0 bg-ink/55 sm:bg-ink/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/45 sm:from-ink/90 sm:via-transparent sm:to-ink/30" />
         </div>
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-12 lg:px-16">
+        <div className="absolute inset-0 z-10 flex w-full flex-col px-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(4.25rem,calc(env(safe-area-inset-top)+3rem))] sm:px-12 sm:pb-0 sm:pt-0 lg:px-16">
           <motion.div
-            variants={staggerContainer(0.14)}
+            variants={staggerContainer(0.12)}
             initial="hidden"
             animate="show"
-            className="flex flex-col items-center text-center"
+            className="flex flex-1 flex-col items-center justify-center text-center"
           >
             <motion.h1
               variants={fadeInUp}
-              className="max-w-3xl text-3xl font-extrabold leading-[1.12] text-white sm:text-5xl lg:text-[3.75rem] mx-auto"
+              className="w-full max-w-none text-[2.125rem] font-extrabold leading-[1.12] tracking-tight text-white sm:max-w-3xl sm:text-5xl lg:text-[3.75rem]"
             >
-              Creative Marketing for
-              <br />
-              Healthcare That Builds
-              <br />
-              <span className="text-accent">Trust.</span>
+              <span className="sm:hidden">
+                Healthcare marketing
+                <br />
+                that builds <span className="text-accent">Trust.</span>
+              </span>
+              <span className="hidden sm:inline">
+                Creative Marketing for
+                <br />
+                Healthcare That Builds
+                <br />
+                <span className="text-accent">Trust.</span>
+              </span>
             </motion.h1>
 
             <motion.p
               variants={fadeInUp}
-              className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 mx-auto sm:mt-6"
+              className="mt-4 w-full max-w-sm text-sm leading-relaxed text-white/85 sm:mt-6 sm:max-w-xl sm:text-white/70"
             >
-              We help hospitals, clinics, and healthcare brands grow with purpose — combining design, strategy, and data‑driven marketing to inspire confidence and lasting connections.
+              Design, strategy, and data-driven marketing for hospitals, clinics, and healthcare brands.
+              <span className="hidden sm:inline">
+                {' '}
+                Built to inspire confidence and lasting connections.
+              </span>
             </motion.p>
+          </motion.div>
+
+          {/* Mobile: one primary action (work scene, or contact on desktop-flow) */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.45 }}
+            className="flex w-full flex-col items-center gap-3 sm:hidden"
+          >
+            {immersive && onContinue ? (
+              <>
+                <button
+                  type="button"
+                  onClick={onContinue}
+                  className="flex w-full items-center justify-center rounded-full bg-accent px-6 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
+                >
+                  See our work
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={onContinue}
+                  className="flex flex-col items-center gap-0.5 text-white/55 transition-colors hover:text-white/85"
+                  aria-label="Swipe up for work"
+                >
+                  <ChevronDown
+                    className={
+                      reduceMotion
+                        ? 'h-5 w-5'
+                        : 'h-5 w-5 animate-bounce'
+                    }
+                  />
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/contact"
+                className="flex w-full items-center justify-center rounded-full bg-accent px-6 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
+              >
+                Get started
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            )}
           </motion.div>
         </div>
 
-        {/* Bottom bar: circles left + green CTA right */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="absolute bottom-0 left-0 right-0 z-10 flex translate-y-1/2 flex-col items-stretch gap-3 px-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-3 lg:px-4"
-        >
-        {/* Circles container (hidden on small screens to save space) */}
-        <div className="hidden sm:flex items-center gap-1.5 rounded-full bg-white p-1.5 shadow-sm shrink-0">
-          <span className="h-10 w-10 rounded-full bg-ink" />
-          <span className="h-10 w-10 rounded-full bg-accent" />
-          <span className="h-10 w-10 rounded-full bg-ink" />
-          <span className="h-10 w-10 rounded-full bg-accent" />
-        </div>
+        {/* Desktop: edge-straddle bar with dots + wide CTA */}
+        {!immersive ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="absolute bottom-0 left-0 right-0 z-10 hidden translate-y-1/2 items-center justify-between gap-4 px-3 sm:flex lg:px-4"
+          >
+            <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-white p-1.5 shadow-sm">
+              <span className="h-10 w-10 rounded-full bg-ink" />
+              <span className="h-10 w-10 rounded-full bg-accent" />
+              <span className="h-10 w-10 rounded-full bg-ink" />
+              <span className="h-10 w-10 rounded-full bg-accent" />
+            </div>
 
-        {/* Green CTA bar */}
-        <Link
-          to="/contact"
-          className="flex w-full sm:flex-1 sm:max-w-[900px] sm:ml-auto items-center justify-center rounded-full bg-accent px-6 py-3.5 text-sm font-bold text-ink transition-colors hover:bg-accent-hover sm:justify-between sm:px-8 sm:py-4"
-        >
-          <span className="sm:hidden">Get started</span>
-          <span className="hidden sm:inline" />
-          <span className="hidden sm:flex items-center">
-            Let&apos;s build your healthcare brand together
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </span>
-        </Link>
-        </motion.div>
+            <Link
+              to="/contact"
+              className="ml-auto flex max-w-[900px] flex-1 items-center justify-end rounded-full bg-accent px-8 py-4 text-sm font-bold text-ink transition-colors hover:bg-accent-hover"
+            >
+              Let&apos;s build your healthcare brand together
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </motion.div>
+        ) : null}
       </div>
     </section>
   )
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
-/*  Latest Projects — left text + right carousel cards                   */
+/*  Latest Projects                                                      */
 /* ────────────────────────────────────────────────────────────────────── */
 function LatestProjects() {
   const [page, setPage] = useState(0)
@@ -135,7 +378,7 @@ function LatestProjects() {
     return () => window.removeEventListener('resize', updatePerView)
   }, [])
 
-  const pages = Math.ceil(projects.length / perView)
+  const pages = Math.ceil(projects.length / perView) || 1
 
   const go = useCallback(
     (dir: number) => setPage((p) => Math.min(pages - 1, Math.max(0, p + dir))),
@@ -162,26 +405,36 @@ function LatestProjects() {
   )
 
   return (
-    <Section>
-      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12 items-center">
-        {/* Left column - Heading & CTA */}
-        <div className="lg:col-span-5 flex flex-col items-start text-left gap-4 sm:gap-6">
-          <span className="inline-flex rounded-full border border-accent/40 bg-accent/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-            latest projects
-          </span>
-          <h2 className="text-xl sm:text-3xl font-extrabold text-ink leading-snug">
-            At MEDesign, we combine creative design, strategy, and data-driven marketing to help healthcare brands grow with purpose.
-          </h2>
+    <Section className="max-sm:pb-8 max-sm:pt-2">
+      <motion.div
+        variants={staggerContainer(0.1)}
+        {...revealOnce}
+        viewport={{ once: true, amount: 0.2 }}
+        className="grid items-start gap-6 lg:grid-cols-12 lg:items-center lg:gap-12"
+      >
+        {/* Mobile: compact bar. Desktop: short side column (no reused pitch). */}
+        <motion.div
+          variants={fadeInUp}
+          className="flex items-end justify-between gap-4 lg:col-span-5 lg:flex-col lg:items-start lg:gap-5"
+        >
+          <div>
+            <span className="inline-flex rounded-full border border-accent/40 bg-accent/5 px-3.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-accent sm:px-4 sm:py-1.5 sm:text-xs">
+              Selected work
+            </span>
+            <h2 className="mt-3 hidden max-w-sm text-3xl font-extrabold leading-snug text-ink sm:block lg:text-[2rem]">
+              Recent work for clinics and hospitals.
+            </h2>
+          </div>
           <Link
             to="/work"
-            className="inline-flex rounded-full bg-ink px-8 py-3.5 text-sm font-bold text-white transition-colors hover:bg-ink/90 mt-2"
+            className="inline-flex shrink-0 items-center rounded-full bg-ink px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-ink/90 sm:mt-1 sm:px-8 sm:py-3.5 sm:text-sm lg:mt-2"
           >
-            More Works
+            More works
+            <ArrowRight className="ml-1.5 h-3.5 w-3.5 sm:ml-2 sm:h-4 sm:w-4" />
           </Link>
-        </div>
+        </motion.div>
 
-        {/* Right column - Carousel */}
-        <div className="lg:col-span-7 w-full overflow-hidden relative">
+        <motion.div variants={fadeInUp} className="relative w-full overflow-hidden lg:col-span-7">
           <div ref={trackRef} className="overflow-hidden">
             <motion.div
               className="flex"
@@ -201,15 +454,14 @@ function LatestProjects() {
             </motion.div>
           </div>
 
-          {/* Carousel arrows */}
-          {pages > 1 && (
-            <div className="mt-8 flex items-center justify-end gap-3">
+          {pages > 1 ? (
+            <div className="mt-5 flex items-center gap-3 sm:mt-8 sm:justify-end">
               <button
                 type="button"
                 onClick={() => go(-1)}
                 disabled={page === 0}
                 aria-label="Previous"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-accent text-accent transition-colors duration-200 hover:bg-accent hover:text-ink disabled:opacity-30"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors duration-200 hover:bg-ink hover:text-white disabled:opacity-30 sm:h-11 sm:w-11 sm:border-accent sm:text-accent sm:hover:bg-accent sm:hover:text-ink"
               >
                 <ArrowRight className="h-4 w-4 rotate-180" />
               </button>
@@ -218,48 +470,51 @@ function LatestProjects() {
                 onClick={() => go(1)}
                 disabled={page === pages - 1}
                 aria-label="Next"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-accent text-accent transition-colors duration-200 hover:bg-accent hover:text-ink disabled:opacity-30"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink transition-colors duration-200 hover:bg-ink hover:text-white disabled:opacity-30 sm:h-11 sm:w-11 sm:border-accent sm:text-accent sm:hover:bg-accent sm:hover:text-ink"
               >
                 <ArrowRight className="h-4 w-4" />
               </button>
+              <span className="text-sm font-semibold tabular-nums text-slate-body sm:hidden">
+                {page + 1}/{pages}
+              </span>
             </div>
-          )}
-        </div>
-      </div>
+          ) : null}
+        </motion.div>
+      </motion.div>
     </Section>
   )
 }
 
-/** Dark card matching the mockup page-1.png with text overlayed inside the block at the bottom. */
 function LatestProjectCard({ project }: { project: Project }) {
   return (
     <motion.article
       variants={fadeInUp}
-      whileHover={{ y: -8 }}
+      whileHover={{ y: -6 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="group relative aspect-[4/5] w-full bg-ink rounded-[2rem] overflow-hidden shadow-card hover:shadow-card-hover cursor-pointer"
+      className="group relative aspect-[4/5] w-full cursor-pointer overflow-hidden rounded-[1.75rem] bg-ink shadow-card hover:shadow-card-hover sm:rounded-[2rem]"
     >
       {project.image ? (
-        <img src={project.image} alt={project.title} className="absolute inset-0 h-full w-full object-cover" />
+        <img
+          src={project.image}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+        />
       ) : null}
-      <Link to={`/work/${project.slug}`} className="absolute inset-0 p-6 flex flex-col justify-end">
-        {/* Dark overlay background for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/40 to-transparent opacity-75 transition-opacity duration-300 group-hover:opacity-90" />
-        
-        {/* Text content inside the card */}
+      <Link to={`/work/${project.slug}`} className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/35 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-95" />
         <div className="relative z-10">
-          <p className="text-white text-lg font-bold leading-snug line-clamp-3">
-            {project.excerpt}
+          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-accent">
+            {project.category}
           </p>
+          <h3 className="mt-1.5 text-lg font-bold leading-snug text-white sm:text-xl">
+            {project.title}
+          </h3>
         </div>
       </Link>
     </motion.article>
   )
 }
 
-/* ────────────────────────────────────────────────────────────────────── */
-/*  Partnerships                                                         */
-/* ────────────────────────────────────────────────────────────────────── */
 function Partnerships() {
   return (
     <Section className="bg-slate-50">
@@ -273,14 +528,22 @@ function Partnerships() {
         description="We're proud to collaborate with leading hospitals, clinics, and healthcare brands across Ethiopia."
       />
 
-      {/* Logo marquee */}
-      <div className="relative mb-14 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-        <div className="flex w-max animate-marquee items-center gap-8 sm:gap-16">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <Logo key={i} variant="dark" className="text-2xl opacity-60" />
+      <div className="relative mb-10 overflow-hidden sm:mb-14 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div className="flex w-max animate-marquee items-center gap-10 sm:gap-16">
+          {[...PARTNER_NAMES, ...PARTNER_NAMES].map((name, i) => (
+            <span
+              key={`${name}-${i}`}
+              className="shrink-0 text-sm font-semibold tracking-wide text-ink/45 sm:text-base"
+            >
+              {name}
+            </span>
           ))}
         </div>
       </div>
+
+      <p className="mb-6 text-center text-xs text-slate-body sm:mb-8">
+        Official partner marks coming soon. Names shown for now.
+      </p>
 
       <motion.div variants={staggerContainer()} {...revealOnce}>
         <Carousel

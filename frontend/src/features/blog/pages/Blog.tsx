@@ -53,19 +53,19 @@ export default function Blog() {
 
 function BlogHero() {
   return (
-    <section className="relative w-full pt-4 pb-12 sm:pb-16">
+    <section className="relative w-full pb-12 sm:pt-4 sm:pb-16">
       <div className="relative">
         <div className="hero-frame hero-mask overflow-hidden">
           <img
             src="/hero-bg.png"
             alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-60"
+            className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-40 sm:object-center sm:opacity-60"
           />
-          <div className="absolute inset-0 bg-ink/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-ink/30" />
+          <div className="absolute inset-0 bg-ink/60 sm:bg-ink/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/75 to-ink/50 sm:from-ink/90 sm:via-transparent sm:to-ink/30" />
         </div>
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-6 sm:px-12 lg:px-16">
+        <div className="absolute inset-0 z-10 flex items-center justify-center px-6 pt-[max(4.5rem,calc(env(safe-area-inset-top)+3.5rem))] sm:px-12 sm:pt-0 lg:px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ function BlogHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="mt-6 max-w-2xl text-sm leading-relaxed text-white/70"
+              className="mt-6 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-white/70"
             >
               Your visionary partners in medical marketing. At MEDesign, we craft highly intentional branding and digital experiences, ensuring your healthcare brand grows authentically, predictably, and with clear purpose.
             </motion.p>
