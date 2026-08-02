@@ -6,11 +6,22 @@ import { TeamMember } from '../entities/team-member.entity'
 import { BlogPost } from '../entities/blog-post.entity'
 import { ContactMessage } from '../entities/contact-message.entity'
 import { User } from '../entities/user.entity'
+import { Partner } from '../entities/partner.entity'
+import { Testimonial } from '../entities/testimonial.entity'
 
 loadEnv({ path: '.env.local' })
 loadEnv()
 
-const entities = [Project, Service, TeamMember, BlogPost, ContactMessage, User]
+const entities = [
+  Project,
+  Service,
+  TeamMember,
+  BlogPost,
+  ContactMessage,
+  User,
+  Partner,
+  Testimonial,
+]
 
 const isProduction = process.env.NODE_ENV === 'production'
 const databaseUrl = process.env.DATABASE_URL?.trim()

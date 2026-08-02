@@ -50,6 +50,13 @@ export class Project {
   @Column({ type: 'simple-array', nullable: true })
   images: string[]
 
+  /** When true, prefer this project on the home "Selected work" strip. */
+  @Column({ default: false })
+  featured: boolean
+
+  @Column({ type: 'int', default: 0 })
+  sortOrder: number
+
   @CreateDateColumn()
   createdAt: Date
 

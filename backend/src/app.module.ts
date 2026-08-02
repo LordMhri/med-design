@@ -12,6 +12,8 @@ import { ServicesModule } from './modules/services/services.module'
 import { ContactModule } from './modules/contact/contact.module'
 import { TeamModule } from './modules/team/team.module'
 import { BlogModule } from './modules/blog/blog.module'
+import { PartnersModule } from './modules/partners/partners.module'
+import { TestimonialsModule } from './modules/testimonials/testimonials.module'
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { BlogModule } from './modules/blog/blog.module'
     ContactModule,
     TeamModule,
     BlogModule,
+    PartnersModule,
+    TestimonialsModule,
   ],
   controllers: [AppController],
   providers: [

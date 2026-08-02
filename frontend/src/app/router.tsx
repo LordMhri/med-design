@@ -23,6 +23,10 @@ const TeamList = lazy(() => import('@/features/admin/pages/TeamList'))
 const TeamEditor = lazy(() => import('@/features/admin/pages/TeamEditor'))
 const ServiceList = lazy(() => import('@/features/admin/pages/ServiceList'))
 const ServiceEditor = lazy(() => import('@/features/admin/pages/ServiceEditor'))
+const PartnerList = lazy(() => import('@/features/admin/pages/PartnerList'))
+const PartnerEditor = lazy(() => import('@/features/admin/pages/PartnerEditor'))
+const TestimonialList = lazy(() => import('@/features/admin/pages/TestimonialList'))
+const TestimonialEditor = lazy(() => import('@/features/admin/pages/TestimonialEditor'))
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +62,12 @@ export const router = createBrowserRouter([
       { path: 'team', element: <TeamList /> },
       { path: 'team/new', element: <TeamEditor /> },
       { path: 'team/:id/edit', element: <TeamEditor /> },
+      { path: 'partners', element: <PartnerList /> },
+      { path: 'partners/new', element: <PartnerEditor /> },
+      { path: 'partners/:id/edit', element: <PartnerEditor /> },
+      { path: 'testimonials', element: <TestimonialList /> },
+      { path: 'testimonials/new', element: <TestimonialEditor /> },
+      { path: 'testimonials/:id/edit', element: <TestimonialEditor /> },
       { path: 'services', element: <ServiceList /> },
       { path: 'services/new', element: <ServiceEditor /> },
       { path: 'services/:id/edit', element: <ServiceEditor /> },

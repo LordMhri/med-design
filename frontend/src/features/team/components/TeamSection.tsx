@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Section } from '@/shared/components/Section'
 import { SectionHeading } from '@/shared/components/SectionHeading'
 import { TeamCard } from './TeamCard'
-import { TEAM, type Member } from '../data'
+import { fetchTeam, TEAM, type Member } from '../data'
 
 const INTRO =
   'Designers, clinicians, and engineers: one studio shaping how healthcare brands show up.'
@@ -13,13 +13,23 @@ export function TeamSection() {
 
   useEffect(() => {
     // Dynamic API team fetch disabled temporarily until admin dashboard rollout.
-    setMembers(TEAM)
+    let cancelled = false
+    fetchTeam()
+      .then((items) => {
+        if (!cancelled) setMembers(items)
+      })
+      .catch(() => {
+        if (!cancelled) setMembers(TEAM)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   return (
     <Section>
       <SectionHeading title="Meet our team" description={INTRO} />
-      <div className="grid gap-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+      <div className="grid gap-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
         {members.map((member, i) => (
           <TeamCard key={`${member.name}-${i}`} member={member} />
         ))}

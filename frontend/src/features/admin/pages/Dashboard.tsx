@@ -6,10 +6,21 @@ import { getProjects } from '@/features/admin/projectStore'
 import { getMessages, getUnreadCount } from '@/features/admin/messageStore'
 import { getTeamMembers } from '@/features/admin/teamStore'
 import { getServices } from '@/features/admin/serviceStore'
+import { getPartners } from '@/features/admin/partnerStore'
+import { getTestimonials } from '@/features/admin/testimonialStore'
 import type { BlogPost } from '@/api/types'
 import type { Project } from '@/api/types'
 import type { ContactMessage } from '@/api/types'
-import { FileText, Briefcase, MessageSquare, Eye, Users, Settings } from '@/shared/components/Icon'
+import {
+  FileText,
+  Briefcase,
+  MessageSquare,
+  Eye,
+  Users,
+  Settings,
+  Building2,
+  Quote,
+} from '@/shared/components/Icon'
 
 export default function Dashboard() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
@@ -17,6 +28,8 @@ export default function Dashboard() {
   const [messages, setMessages] = useState<ContactMessage[]>([])
   const [teamCount, setTeamCount] = useState(0)
   const [servicesCount, setServicesCount] = useState(0)
+  const [partnerCount, setPartnerCount] = useState(0)
+  const [testimonialCount, setTestimonialCount] = useState(0)
   const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
@@ -25,6 +38,8 @@ export default function Dashboard() {
     getMessages().then(setMessages).catch(() => {})
     getTeamMembers().then((items) => setTeamCount(items.length)).catch(() => {})
     getServices().then((items) => setServicesCount(items.length)).catch(() => {})
+    getPartners().then((items) => setPartnerCount(items.length)).catch(() => {})
+    getTestimonials().then((items) => setTestimonialCount(items.length)).catch(() => {})
     getUnreadCount().then(setUnreadCount).catch(() => {})
   }, [])
 
@@ -32,9 +47,11 @@ export default function Dashboard() {
     <div>
       <h1 className="mb-6 text-2xl font-bold text-ink">Dashboard</h1>
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
         <StatsCard label="Blog Posts" value={blogPosts.length} icon={<FileText className="h-6 w-6" />} />
         <StatsCard label="Projects" value={projects.length} icon={<Briefcase className="h-6 w-6" />} />
+        <StatsCard label="Partners" value={partnerCount} icon={<Building2 className="h-6 w-6" />} />
+        <StatsCard label="Testimonials" value={testimonialCount} icon={<Quote className="h-6 w-6" />} />
         <StatsCard label="Team" value={teamCount} icon={<Users className="h-6 w-6" />} />
         <StatsCard label="Services" value={servicesCount} icon={<Settings className="h-6 w-6" />} />
         <StatsCard label="Messages" value={messages.length} icon={<MessageSquare className="h-6 w-6" />} />

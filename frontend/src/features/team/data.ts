@@ -1,3 +1,11 @@
+// import { teamApi } from '@/api/services/team'
+// import { partnersApi } from '@/api/services/partners'
+// import { testimonialsApi } from '@/api/services/testimonials'
+// import type {
+//   Partner as ApiPartner,
+//   Testimonial as ApiTestimonial,
+// } from '@/api/types'
+
 export type Member = {
   name: string
   role: string
@@ -12,25 +20,27 @@ export const TEAM: Member[] = [
   },
   {
     name: 'Dr. Sara Tekle',
-    role: 'Medical Doctor, Marketing Expert & Head of MED Marketing Department',
+    role: 'Medical Marketing Lead',
     image: '/team-sara.png',
   },
   {
     name: 'Meheret Alemu',
-    role: 'Software Engineer & Head of MED IT Department',
+    role: 'Head of MED IT',
     image: '/team-meheret.png',
   },
   {
     name: 'Yeabtsega Mekonnen',
-    role: 'Full Stack Developer & UI/UX Designer',
+    role: 'Full Stack Designer',
     image: '/team-yeabtsega.png',
   },
 ]
 
 export type Testimonial = {
+  id?: string
   name: string
   title: string
   quote: string
+  avatarUrl?: string
 }
 
 export const TESTIMONIALS: Testimonial[] = [
@@ -60,6 +70,13 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ]
 
+export type Partner = {
+  id?: string
+  name: string
+  logoUrl?: string
+  websiteUrl?: string
+}
+
 /** Partner names shown as quiet wordmarks until official logos ship. */
 export const PARTNER_NAMES = [
   'Addis Specialty Clinic',
@@ -69,3 +86,52 @@ export const PARTNER_NAMES = [
   'MedEd Ethiopia',
   'St. Gabriel Care',
 ] as const
+
+export const PARTNERS: Partner[] = PARTNER_NAMES.map((name) => ({ name }))
+
+// function mapPartner(p: ApiPartner): Partner {
+//   return {
+//     id: p.id,
+//     name: p.name,
+//     logoUrl: p.logoUrl,
+//     websiteUrl: p.websiteUrl,
+//   }
+// }
+
+// function mapTestimonial(t: ApiTestimonial): Testimonial {
+//   return {
+//     id: t.id,
+//     name: t.name,
+//     title: t.title,
+//     quote: t.quote,
+//     avatarUrl: t.avatarUrl,
+//   }
+// }
+
+export async function fetchTeam(): Promise<Member[]> {
+  // Dynamic API team fetch disabled temporarily until admin dashboard rollout.
+  // const items = await teamApi.getAll()
+  // if (items.length === 0) return TEAM
+  // return items.map((m) => ({
+  //   name: m.name,
+  //   role: m.position,
+  //   image: m.image,
+  // }))
+  return TEAM
+}
+
+export async function fetchPartners(): Promise<Partner[]> {
+  // Dynamic API partners fetch disabled temporarily until admin dashboard rollout.
+  // const items = await partnersApi.getAll()
+  // if (items.length === 0) return PARTNERS
+  // return items.map(mapPartner)
+  return PARTNERS
+}
+
+export async function fetchTestimonials(): Promise<Testimonial[]> {
+  // Dynamic API testimonials fetch disabled temporarily until admin dashboard rollout.
+  // const items = await testimonialsApi.getAll()
+  // if (items.length === 0) return TESTIMONIALS
+  // return items.map(mapTestimonial)
+  return TESTIMONIALS
+}

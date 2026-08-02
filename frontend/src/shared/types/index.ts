@@ -13,6 +13,8 @@ export type Project = {
   solution?: string
   results?: string
   images?: string[]
+  featured?: boolean
+  sortOrder?: number
   createdAt?: string
   updatedAt?: string
 }
@@ -41,6 +43,29 @@ export type TeamMember = {
   linkedinUrl?: string
   twitterUrl?: string
   portfolioUrl?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export type Partner = {
+  id: string
+  name: string
+  logoUrl?: string
+  websiteUrl?: string
+  sortOrder?: number
+  isActive?: boolean
+  createdAt?: string
+  updatedAt?: string
+}
+
+export type Testimonial = {
+  id: string
+  name: string
+  title: string
+  quote: string
+  avatarUrl?: string
+  sortOrder?: number
+  isActive?: boolean
   createdAt?: string
   updatedAt?: string
 }
@@ -102,6 +127,8 @@ export type CreateProjectDto = {
   solution?: string
   results?: string
   images?: string[]
+  featured?: boolean
+  sortOrder?: number
 }
 
 export type CreateServiceDto = {
@@ -124,6 +151,23 @@ export type CreateTeamMemberDto = {
   linkedinUrl?: string
   twitterUrl?: string
   portfolioUrl?: string
+}
+
+export type CreatePartnerDto = {
+  name: string
+  logoUrl?: string
+  websiteUrl?: string
+  sortOrder?: number
+  isActive?: boolean
+}
+
+export type CreateTestimonialDto = {
+  name: string
+  title: string
+  quote: string
+  avatarUrl?: string
+  sortOrder?: number
+  isActive?: boolean
 }
 
 export type CreateBlogPostDto = {

@@ -8,6 +8,8 @@ import {
   Settings,
   MessageSquare,
   LogOut,
+  Building2,
+  Quote,
 } from '@/shared/components/Icon'
 import { logout } from '@/features/admin/auth'
 
@@ -15,6 +17,8 @@ const links = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/admin/blog', label: 'Blog Posts', icon: FileText },
   { to: '/admin/projects', label: 'Projects', icon: Briefcase },
+  { to: '/admin/partners', label: 'Partners', icon: Building2 },
+  { to: '/admin/testimonials', label: 'Testimonials', icon: Quote },
   { to: '/admin/team', label: 'Team Members', icon: Users },
   { to: '/admin/services', label: 'Services', icon: Settings },
   { to: '/admin/messages', label: 'Messages', icon: MessageSquare },

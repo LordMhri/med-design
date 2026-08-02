@@ -7,6 +7,8 @@ import { Project } from '../entities/project.entity'
 import { BlogPost } from '../entities/blog-post.entity'
 import { Service } from '../entities/service.entity'
 import { TeamMember } from '../entities/team-member.entity'
+import { Partner } from '../entities/partner.entity'
+import { Testimonial } from '../entities/testimonial.entity'
 
 export async function runSeed(app: INestApplicationContext): Promise<void> {
   const users = app.get<Repository<User>>(getRepositoryToken(User))
@@ -14,6 +16,10 @@ export async function runSeed(app: INestApplicationContext): Promise<void> {
   const posts = app.get<Repository<BlogPost>>(getRepositoryToken(BlogPost))
   const services = app.get<Repository<Service>>(getRepositoryToken(Service))
   const team = app.get<Repository<TeamMember>>(getRepositoryToken(TeamMember))
+  const partners = app.get<Repository<Partner>>(getRepositoryToken(Partner))
+  const testimonials = app.get<Repository<Testimonial>>(
+    getRepositoryToken(Testimonial),
+  )
 
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@medesign.com'
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'
@@ -38,58 +44,73 @@ export async function runSeed(app: INestApplicationContext): Promise<void> {
   if ((await projects.count()) === 0) {
     const sampleProjects = [
       {
-        title: 'Brand Strategy & Identity',
-        slug: 'brand-strategy-identity',
-        excerpt: 'Crafting modern identity guidelines for medical providers.',
-        category: 'Branding',
-        tags: ['Branding', 'Design System'],
+        title: 'St. Mary Specialty Clinic Rebrand',
+        slug: 'st-mary-rebrand',
+        excerpt: 'Unified brand identity across patient touchpoints.',
+        category: 'Branding & Identity',
+        tags: ['Branding', 'Strategy'],
         description:
-          'We built a complete brand system for a multi-clinic healthcare group, including identity guidelines, typography, and patient-facing collateral.',
+          'We redesigned the clinic brand system, messaging tone, and visual language to make patient communication clearer and more consistent across digital and print assets.',
+        image: '/project-st-mary.jpg',
+        featured: true,
+        sortOrder: 1,
+      },
+      {
+        title: 'City Heart Hospital Campaign',
+        slug: 'city-heart-campaign',
+        excerpt: 'Awareness, bookings, and patient education, grown together.',
+        category: 'Marketing & Growth',
+        tags: ['Campaign', 'Social Media'],
+        description:
+          'Our team launched multi-channel campaign creatives and weekly performance optimization that increased appointment intent and improved engagement quality.',
+        image: '/project-city-heart.jpg',
+        featured: true,
+        sortOrder: 2,
+      },
+      {
+        title: 'MedEd Learning Content Series',
+        slug: 'meded-learning-series',
+        excerpt: 'Educational multimedia for patient awareness and retention.',
+        category: 'Multimedia Production',
+        tags: ['Video', 'Content'],
+        description:
+          'We produced short-form health education videos, motion graphics, and awareness visuals designed to simplify complex medical information for the public.',
+        image: '/project-meded.jpg',
+        featured: true,
+        sortOrder: 3,
       },
       {
         title: 'Responsive Medical Portal',
         slug: 'responsive-medical-portal',
-        excerpt: 'Designing patient-first digital experiences on web & mobile.',
-        category: 'Web Design',
+        excerpt: 'Designing patient-first digital experiences on web and mobile.',
+        category: 'Website & Digital',
         tags: ['Web Design', 'UI/UX Design'],
         description:
           'A responsive patient portal focused on appointment booking, care instructions, and clear clinical communication.',
+        featured: false,
+        sortOrder: 4,
       },
       {
         title: 'Targeted Patient Acquisition',
         slug: 'targeted-patient-acquisition',
-        excerpt: 'Driving appointments via Google & social PPC campaigns.',
-        category: 'Marketing',
+        excerpt: 'Driving appointments via Google and social PPC campaigns.',
+        category: 'Marketing & Growth',
         tags: ['Marketing', 'PPC Campaigns'],
         description:
           'Paid acquisition campaigns across Google and Meta that increased qualified appointment requests for specialty clinics.',
-      },
-      {
-        title: 'Clinic Logo & Collateral',
-        slug: 'clinic-logo-collateral',
-        excerpt: 'Custom logo design for specialized clinics.',
-        category: 'Branding',
-        tags: ['Logo Design', 'Branding'],
-        description:
-          'Logo, stationery, and signage suite for a specialty clinic launching a new location.',
+        featured: false,
+        sortOrder: 5,
       },
       {
         title: 'Custom Telehealth Platform',
         slug: 'custom-telehealth-platform',
         excerpt: 'Secure portal development for medical communications.',
-        category: 'Web Design',
+        category: 'Website & Digital',
         tags: ['Web Design', 'Development'],
         description:
           'Telehealth experience with secure messaging, visit summaries, and mobile-first UX for patients and providers.',
-      },
-      {
-        title: 'Social Media Growth Campaign',
-        slug: 'social-media-growth-campaign',
-        excerpt: 'Growing brand awareness and engagement across channels.',
-        category: 'Marketing',
-        tags: ['Marketing', 'Social Media'],
-        description:
-          'Content and community strategy that grew awareness for a regional healthcare brand across Instagram and LinkedIn.',
+        featured: false,
+        sortOrder: 6,
       },
     ]
 
@@ -215,23 +236,93 @@ export async function runSeed(app: INestApplicationContext): Promise<void> {
         name: 'Eyasu Kebede',
         position: 'CEO and Creative Director',
         bio: 'Leads creative strategy and brand direction for healthcare clients across digital and print.',
+        image: '/team-eyasu.png',
         expertise: ['Brand Strategy', 'Creative Direction'],
       },
       {
-        name: 'Sara Haile',
-        position: 'Head of Digital Marketing',
-        bio: 'Builds patient acquisition systems through PPC, content, and conversion-focused campaigns.',
-        expertise: ['PPC', 'Content Marketing'],
+        name: 'Dr. Sara Tekle',
+        position: 'Medical Marketing Lead',
+        bio: 'Bridges clinical credibility and patient-facing campaigns for hospitals and specialty clinics.',
+        image: '/team-sara.png',
+        expertise: ['Healthcare Marketing', 'Content'],
       },
       {
-        name: 'Daniel Mekonnen',
-        position: 'Lead Product Designer',
-        bio: 'Designs patient-first digital experiences for clinics, telehealth, and care portals.',
-        expertise: ['UI/UX', 'Web Design'],
+        name: 'Meheret Alemu',
+        position: 'Head of MED IT',
+        bio: 'Builds digital products and systems that keep clinic brands fast, secure, and measurable.',
+        image: '/team-meheret.png',
+        expertise: ['Engineering', 'Product'],
+      },
+      {
+        name: 'Yeabtsega Mekonnen',
+        position: 'Full Stack Designer',
+        bio: 'Designs and ships interfaces that make care pathways clearer for patients and staff.',
+        image: '/team-yeabtsega.png',
+        expertise: ['UI/UX', 'Frontend'],
       },
     ]
 
     await team.save(sampleTeam.map((m) => team.create(m)))
     console.log(`Seeded ${sampleTeam.length} team members`)
+  }
+
+  if ((await partners.count()) === 0) {
+    const samplePartners = [
+      'Addis Specialty Clinic',
+      'Nile Heart Center',
+      'CarePath Diagnostics',
+      'Horizon Hospitals',
+      'MedEd Ethiopia',
+      'St. Gabriel Care',
+    ].map((name, i) => ({
+      name,
+      sortOrder: i + 1,
+      isActive: true,
+    }))
+
+    await partners.save(samplePartners.map((p) => partners.create(p)))
+    console.log(`Seeded ${samplePartners.length} partners`)
+  }
+
+  if ((await testimonials.count()) === 0) {
+    const sampleTestimonials = [
+      {
+        name: 'Dr. Helen Assefa',
+        title: 'Medical Director, Addis Specialty Clinic',
+        quote:
+          'MEDesign gave our clinic a voice patients actually trust: clear, calm, and consistent from the waiting room to Instagram.',
+        sortOrder: 1,
+        isActive: true,
+      },
+      {
+        name: 'Abel Tadesse',
+        title: 'Marketing Lead, Nile Heart Center',
+        quote:
+          'They treated our campaign like clinical work: measured, iterative, and always about the patient outcome.',
+        sortOrder: 2,
+        isActive: true,
+      },
+      {
+        name: 'Sara Negash',
+        title: 'Founder, CarePath Diagnostics',
+        quote:
+          'From brand system to launch creatives, the team understood healthcare constraints without dulling the craft.',
+        sortOrder: 3,
+        isActive: true,
+      },
+      {
+        name: 'Yonatan Bekele',
+        title: 'Operations Manager, Horizon Hospitals',
+        quote:
+          'Our digital presence finally matches the standard of care we deliver on the floor. That shift was overdue.',
+        sortOrder: 4,
+        isActive: true,
+      },
+    ]
+
+    await testimonials.save(
+      sampleTestimonials.map((t) => testimonials.create(t)),
+    )
+    console.log(`Seeded ${sampleTestimonials.length} testimonials`)
   }
 }

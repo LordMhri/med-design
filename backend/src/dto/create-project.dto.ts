@@ -1,4 +1,12 @@
-import { IsString, IsArray, IsOptional, IsUrl } from 'class-validator'
+import {
+  IsString,
+  IsArray,
+  IsOptional,
+  IsUrl,
+  IsBoolean,
+  IsInt,
+} from 'class-validator'
+import { Type } from 'class-transformer'
 
 export class CreateProjectDto {
   @IsString()
@@ -50,4 +58,13 @@ export class CreateProjectDto {
   @IsOptional()
   @IsArray()
   images?: string[]
+
+  @IsOptional()
+  @IsBoolean()
+  featured?: boolean
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  sortOrder?: number
 }

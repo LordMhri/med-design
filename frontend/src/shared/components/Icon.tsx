@@ -263,3 +263,11 @@ export const Settings = (p: IconProps) => (
     <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
   </svg>
 )
+
+export const Building2 = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M6 22V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v18" />
+    <path d="M14 10h4a1 1 0 0 1 1 1v11" />
+    <path d="M9 8h1M9 12h1M9 16h1M18 14h1M18 18h1" />
+  </svg>
+)

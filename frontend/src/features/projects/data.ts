@@ -11,6 +11,8 @@ export type Project = {
   tags: string[]
   description: string
   image?: string
+  featured?: boolean
+  sortOrder?: number
 }
 
 // export function mapProject(p: ApiProject): Project {
@@ -24,6 +26,8 @@ export type Project = {
 //     tags: p.tags || [],
 //     description: p.description,
 //     image: p.image,
+//     featured: p.featured,
+//     sortOrder: p.sortOrder,
 //   }
 // }
 
@@ -38,6 +42,8 @@ export const PROJECTS: Project[] = [
     description:
       'We redesigned the clinic brand system, messaging tone, and visual language to make patient communication clearer and more consistent across digital and print assets.',
     image: '/project-st-mary.jpg',
+    featured: true,
+    sortOrder: 1,
   },
   {
     id: 'project-2',
@@ -49,6 +55,8 @@ export const PROJECTS: Project[] = [
     description:
       'Our team launched multi-channel campaign creatives and weekly performance optimization that increased appointment intent and improved engagement quality.',
     image: '/project-city-heart.jpg',
+    featured: true,
+    sortOrder: 2,
   },
   {
     id: 'project-3',
@@ -60,14 +68,24 @@ export const PROJECTS: Project[] = [
     description:
       'We produced short-form health education videos, motion graphics, and awareness visuals designed to simplify complex medical information for the public.',
     image: '/project-meded.jpg',
+    featured: true,
+    sortOrder: 3,
   },
 ]
 
 export async function fetchProjects(): Promise<Project[]> {
   // Dynamic API fetch disabled temporarily until admin dashboard rollout.
   // const items = await projectsApi.getAll()
+  // if (items.length === 0) return PROJECTS
   // return items.map(mapProject)
   return PROJECTS
+}
+
+/** Featured projects for the home strip; falls back to first 6. */
+export async function fetchFeaturedProjects(limit = 6): Promise<Project[]> {
+  const all = await fetchProjects()
+  const featured = all.filter((p) => p.featured)
+  return (featured.length > 0 ? featured : all).slice(0, limit)
 }
 
 export async function fetchProject(slug: string): Promise<Project | undefined> {
@@ -80,7 +98,7 @@ export async function fetchProject(slug: string): Promise<Project | undefined> {
   //     const project = await projectsApi.getById(slug)
   //     return mapProject(project)
   //   } catch {
-  //     return undefined
+  //     return PROJECTS.find((p) => p.slug === slug || p.id === slug)
   //   }
   // }
   return PROJECTS.find((p) => p.slug === slug || p.id === slug)

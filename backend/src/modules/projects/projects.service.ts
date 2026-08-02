@@ -24,6 +24,8 @@ export class ProjectsService {
   async findAll(): Promise<Project[]> {
     return this.projectsRepository.find({
       order: {
+        featured: 'DESC',
+        sortOrder: 'ASC',
         createdAt: 'DESC',
       },
     })

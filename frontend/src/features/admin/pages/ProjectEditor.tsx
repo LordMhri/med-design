@@ -14,8 +14,11 @@ export default function ProjectEditor() {
     slug: '',
     excerpt: '',
     category: '',
+    image: '',
     tags: '',
     description: '',
+    featured: false,
+    sortOrder: '0',
   })
 
   useEffect(() => {
@@ -27,8 +30,11 @@ export default function ProjectEditor() {
             slug: project.slug || slugify(project.title),
             excerpt: project.excerpt || '',
             category: project.category || '',
+            image: project.image || '',
             tags: project.tags?.join(', ') || '',
             description: project.description,
+            featured: Boolean(project.featured),
+            sortOrder: String(project.sortOrder ?? 0),
           })
         }
       })
@@ -38,9 +44,13 @@ export default function ProjectEditor() {
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) {
-    const { name, value } = e.target
+    const { name, value, type } = e.target
+    const checked = (e.target as HTMLInputElement).checked
     setForm((prev) => {
-      const updated = { ...prev, [name]: value }
+      const updated = {
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value,
+      }
       if (name === 'title' && !isEdit) {
         updated.slug = slugify(value)
       }
@@ -58,7 +68,10 @@ export default function ProjectEditor() {
         slug: form.slug || slugify(form.title),
         excerpt: form.excerpt,
         category: form.category || undefined,
+        image: form.image || undefined,
         description: form.description,
+        featured: form.featured,
+        sortOrder: Number(form.sortOrder) || 0,
         tags: form.tags
           .split(',')
           .map((t) => t.trim())
@@ -113,6 +126,49 @@ export default function ProjectEditor() {
           />
         </div>
 
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-ink" htmlFor="category">
+              Category
+            </label>
+            <input
+              id="category"
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink placeholder:text-slate-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+              placeholder="Branding & Identity"
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-ink" htmlFor="sortOrder">
+              Sort order
+            </label>
+            <input
+              id="sortOrder"
+              name="sortOrder"
+              type="number"
+              value={form.sortOrder}
+              onChange={handleChange}
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink placeholder:text-slate-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-ink" htmlFor="image">
+            Cover image URL
+          </label>
+          <input
+            id="image"
+            name="image"
+            value={form.image}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-ink placeholder:text-slate-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            placeholder="/project-cover.jpg or https://..."
+          />
+        </div>
+
         <div>
           <label className="mb-1.5 block text-sm font-medium text-ink" htmlFor="tags">
             Tags (comma-separated)
@@ -142,6 +198,17 @@ export default function ProjectEditor() {
             placeholder="Full project description..."
           />
         </div>
+
+        <label className="inline-flex items-center gap-2 text-sm font-medium text-ink">
+          <input
+            type="checkbox"
+            name="featured"
+            checked={form.featured}
+            onChange={handleChange}
+            className="h-4 w-4 rounded border-slate-300 text-accent focus:ring-accent/30"
+          />
+          Featured on home (Selected work)
+        </label>
 
         <div className="flex items-center gap-3 pt-2">
           <button
